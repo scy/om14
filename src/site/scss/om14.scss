@@ -11,10 +11,17 @@ $bubbleBotGreen: $headingGreen;
 $bubbleTxtGreen: #75bf90;
 $orange: #f39200;
 $white : #fff;
+$textColor: #3d433f;
 
 @mixin politics {
 	font: {
 		family: "Politics Head"; // TODO: Webfont.
+	}
+}
+
+@mixin dejaweb {
+	font: {
+		family: "DejaWeb"; // TODO: Webfont.
 	}
 }
 
@@ -53,6 +60,13 @@ nav {
 	}
 }
 
+#content {
+	@include dejaweb;
+	width: 940px;
+	margin: 0 auto;
+	color: $textColor;
+}
+
 h1 {
 	@include politics;
 	text-align: center;
@@ -65,4 +79,9 @@ h1 {
 		background: $orange;
 		color: $white;
 	}
+}
+
+h2 {
+	@include politics;
+	color: #000;
 }
