@@ -20,4 +20,29 @@ body {
 
 nav {
 	background: $headerGreen;
+	font-family: "Politics Head";
+	font-size: 18px;
+	line-height: 40px;
+
+	ul {
+		margin: 0;
+		padding: 0;
+		text-align: center;
+	}
+
+	li {
+		// TODO: There is a space between the <li>s. Get rid of that.
+		display: inline;
+
+		a {
+			display: inline-block;
+			color: $white;
+			text-decoration: none;
+			text-transform: uppercase;
+			padding: 0 20px;
+			&:hover {
+				background-color: $orange;
+			}
+		}
+	}
 }
