@@ -1,0 +1,23 @@
+@import "normalize.scss";
+
+$lightGreen: #9aceac; // background, logo background
+$headerGreen: #2fac66;
+$footerGreen: #2f9e54;
+$headingGreen: #5bb278;
+$claimGreen  : #0b8e36;
+$bubbleGreen   : #48af70;
+$bubbleTopGreen: #6bbf8d;
+$bubbleBotGreen: $headingGreen;
+$bubbleTxtGreen: #75bf90;
+$orange: #f39200;
+$white : #fff;
+
+body {
+	background: $lightGreen;
+	font-family: sans-serif;
+	padding: 0;
+}
+
+nav {
+	background: $headerGreen;
+}
