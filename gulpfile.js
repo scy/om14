@@ -41,7 +41,13 @@ gulp.task("html", function () {
 	gulp.src(opts.pages)
 		.pipe(marked())
 		.pipe(cheerio(function ($, done) {
-			data.title = $("h1").first().text();
+			var $h1 = $("h1"); // all <h1> elements
+			data.title = $h1.first().text(); // set the title to the text of the first <h1>
+			// Add a wrapper span inside every <h1>.
+			$h1.each(function (idx, el) {
+				var $el = $(el);
+				$el.html('<span class="wrapper">' + $el.html() + '</span>');
+			});
 			done();
 		}))
 		.pipe(wrap({ src: opts.template }, data))

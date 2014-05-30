@@ -12,6 +12,12 @@ $bubbleTxtGreen: #75bf90;
 $orange: #f39200;
 $white : #fff;
 
+@mixin politics {
+	font: {
+		family: "Politics Head"; // TODO: Webfont.
+	}
+}
+
 body {
 	background: $lightGreen;
 	font-family: sans-serif;
@@ -19,8 +25,8 @@ body {
 }
 
 nav {
+	@include politics;
 	background: $headerGreen;
-	font-family: "Politics Head";
 	font-size: 18px;
 	line-height: 40px;
 
@@ -44,5 +50,18 @@ nav {
 				background-color: $orange;
 			}
 		}
+	}
+}
+
+h1 {
+	@include politics;
+	text-align: center;
+	margin: 50px 0;
+
+	span.wrapper {
+		max-width: 50%;
+		padding: 14px 25px;
+		background: $orange;
+		color: $white;
 	}
 }
