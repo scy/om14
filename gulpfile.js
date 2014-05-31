@@ -23,6 +23,8 @@ var opts = {
   , allJS:    "src/site/js/**"
   , imgSrc:   "src/site/img/**"
   , imgDest:  "htdocs/img"
+  , fontSrc:  "src/site/fonts/**"
+  , fontDest: "htdocs/fonts"
 };
 
 var site = {
@@ -37,6 +39,8 @@ gulp.task("clean", function () {
 gulp.task("assets", function () {
 	gulp.src(opts.imgSrc)
 		.pipe(gulp.dest(opts.imgDest));
+	gulp.src(opts.fontSrc)
+		.pipe(gulp.dest(opts.fontDest));
 });
 
 gulp.task("html", function () {

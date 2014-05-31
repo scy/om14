@@ -13,15 +13,73 @@ $orange: #f39200;
 $white : #fff;
 $textColor: #3d433f;
 
+@font-face {
+	font-family: 'DejaWeb';
+	src: url('/fonts/dejaweb.eot');
+	src: local('DejaWeb'), local('DejaWeb Regular'), local('DejaWeb-Regular'),
+	     url('/fonts/dejaweb.eot') format('embedded-opentype'),
+	     url('/fonts/dejaweb.woff') format('woff'),
+	     url('/fonts/dejaweb.ttf') format('truetype'),
+	     url('/fonts/dejaweb.svg#DejaWebRegular') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'DejaWeb';
+	src: url('/fonts/dejaweb-italic.eot');
+	src: local('DejaWeb Italic'), local('DejaWeb-Italic'),
+	     url('/fonts/dejaweb-italic.eot') format('embedded-opentype'),
+	     url('/fonts/dejaweb-italic.woff') format('woff'),
+	     url('/fonts/dejaweb-italic.ttf') format('truetype'),
+	     url('/fonts/dejaweb-italic.svg#DejaWebItalic') format('svg');
+	font-weight: normal;
+	font-style: italic;
+}
+@font-face {
+	font-family: 'DejaWeb';
+	src: url('/fonts/dejaweb-bold.eot');
+	src: local('DejaWeb Bold'), local('DejaWeb-Bold'),
+	     url('/fonts/dejaweb-bold.eot') format('embedded-opentype'),
+	     url('/fonts/dejaweb-bold.woff') format('woff'),
+	     url('/fonts/dejaweb-bold.ttf') format('truetype'),
+	     url('/fonts/dejaweb-bold.svg#DejaWebBold') format('svg');
+	font-weight: bold;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'DejaWeb';
+	src: url('/fonts/dejaweb-bolditalic.eot');
+	src: local('DejaWeb Bold Italic'), local('DejaWeb-BoldItalic'),
+	     url('/fonts/dejaweb-bolditalic.eot') format('embedded-opentype'),
+	     url('/fonts/dejaweb-bolditalic.woff') format('woff'),
+	     url('/fonts/dejaweb-bolditalic.ttf') format('truetype'),
+	     url('/fonts/dejaweb-bolditalic.svg#DejaWebBoldItalic') format('svg');
+	font-weight: bold;
+	font-style: italic;
+}
+@font-face {
+	font-family: 'Politics Head';
+	src: url('/fonts/politicshead.eot');
+	src: local('Politics Head'), local('Politics Head Bold'), local('PoliticsHead-Bold'), local('Politics Head Regular'), local('PoliticsHead-Regular'),
+	     url('/fonts/politicshead.eot') format('embedded-opentype'),
+	     url('/fonts/politicshead.woff') format('woff'),
+	     url('/fonts/politicshead.ttf') format('truetype'),
+	     url('/fonts/politicshead.svg#PoliticsHeadBold') format('svg');
+	font-weight: bold;
+	font-style: normal;
+}
+
 @mixin politics {
 	font: {
-		family: "Politics Head"; // TODO: Webfont.
+		family: "Politics Head", "Verdana", "Vera Sans", sans-serif;
+		weight: bold;
 	}
+	text-transform: uppercase;
 }
 
 @mixin dejaweb {
 	font: {
-		family: "DejaWeb"; // TODO: Webfont.
+		family: "DejaWeb", "Verdana", "Vera Sans", sans-serif;
 	}
 }
 
@@ -51,7 +109,6 @@ nav {
 			display: inline-block;
 			color: $white;
 			text-decoration: none;
-			text-transform: uppercase;
 			padding: 0 20px;
 			&:hover {
 				background-color: $orange;
