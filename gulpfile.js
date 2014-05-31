@@ -21,6 +21,8 @@ var opts = {
   , headJS:   "src/site/js/*modernizr*"
   , footJS:   "src/site/js/*jquery*"
   , allJS:    "src/site/js/**"
+  , imgSrc:   "src/site/img/**"
+  , imgDest:  "htdocs/img"
 };
 
 var site = {
@@ -33,7 +35,8 @@ gulp.task("clean", function () {
 });
 
 gulp.task("assets", function () {
-	// TODO: implement
+	gulp.src(opts.imgSrc)
+		.pipe(gulp.dest(opts.imgDest));
 });
 
 gulp.task("html", function () {
@@ -74,7 +77,7 @@ gulp.task("js", function () {
 		.pipe(gulp.dest(opts.docroot));
 });
 
-gulp.task("all", [ "html", "css", "js" ]);
+gulp.task("all", [ "assets", "html", "css", "js" ]);
 
 gulp.task("watch", function () {
 	http.createServer(ecstatic({
@@ -82,6 +85,7 @@ gulp.task("watch", function () {
 		defaultExt: "html", // https://github.com/jesusabdullah/node-ecstatic/issues/108
 		autoIndex: true
 	})).listen(8014);
+	gulp.watch([ opts.imgSrc ], [ "assets" ]);
 	gulp.watch([ opts.pages, opts.template ], [ "html" ]);
 	gulp.watch([ opts.allSCSS ], [ "css" ]);
 	gulp.watch([ opts.allJS ], [ "js" ]);
