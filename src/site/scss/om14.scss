@@ -61,7 +61,7 @@ nav {
 }
 
 #header {
-	height: 500px;
+	height: 400px;
 	background: {
 		color: #000;
 		position: 50% 50%;
@@ -72,6 +72,14 @@ nav {
 			image: url("/img/header-fallback.jpg");
 			size: cover;
 		}
+	}
+	canvas {
+		image-rendering: optimizeSpeed;
+		image-rendering: -moz-crisp-edges;
+		image-rendering: -webkit-optimize-contrast;
+		image-rendering: -o-crisp-edges;
+		image-rendering: crisp-edges;
+		-ms-interpolation-mode: nearest-neighbor;
 	}
 }
 

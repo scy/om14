@@ -19,7 +19,7 @@ var opts = {
   , scss:     "src/site/scss/om14.scss"
   , allSCSS:  "src/site/scss/**"
   , headJS:   "src/site/js/*modernizr*"
-  , footJS:   "src/site/js/*jquery*"
+  , footJS:   "src/site/js/!(*modernizr*)"
   , allJS:    "src/site/js/**"
   , imgSrc:   "src/site/img/**"
   , imgDest:  "htdocs/img"
