@@ -60,6 +60,21 @@ nav {
 	}
 }
 
+#header {
+	height: 500px;
+	background: {
+		color: #000;
+		position: 50% 50%;
+		repeat: no-repeat;
+	}
+	html.no-js &, html.no-canvas & {
+		background: {
+			image: url("/img/header-fallback.jpg");
+			size: cover;
+		}
+	}
+}
+
 #content {
 	@include dejaweb;
 	width: 940px;
