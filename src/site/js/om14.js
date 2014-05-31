@@ -40,6 +40,8 @@ jQuery(function ($) {
 			ctx.drawImage(img, 0, 0, smallW, smallH);
 			// Resize it to "px" times its size, center it in the container.
 			ctx.drawImage(canvas, 0, 0, smallW, smallH, (contW - stretchedW) / 2, (contH - stretchedH) / 2, stretchedW, stretchedH);
+			// Set as background image.
+			$container.css("background-image", "url(" + canvas.toDataURL() + ")");
 		};
 		// If the window resizes, we have to redraw.
 		$(window).resize(drawCanvas);
@@ -51,8 +53,6 @@ jQuery(function ($) {
 		};
 		// Set the URL.
 		img.src = src;
-		// Inject the canvas.
-		$container.prepend($canvas);
 	};
 
 	// If we have a header image and canvas support, do the fancy pixelation stuff. Else, the fallback CSS applies.

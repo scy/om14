@@ -118,7 +118,6 @@ nav {
 }
 
 #header {
-	height: 400px;
 	background: {
 		color: #000;
 		position: 50% 50%;
@@ -138,6 +137,27 @@ nav {
 		image-rendering: crisp-edges;
 		-ms-interpolation-mode: nearest-neighbor;
 	}
+}
+
+#logo {
+	@include politics;
+	text-align: center;
+	width: 100%;
+	padding: 32px 0;
+}
+
+#hashtag {
+	color: $headingGreen;
+	font-size: 80px;
+}
+
+#claim {
+	color: $claimGreen;
+	font-size: 25px;
+}
+
+#hashtag, #claim {
+	text-shadow: #000 0 0 2px;
 }
 
 #content {
