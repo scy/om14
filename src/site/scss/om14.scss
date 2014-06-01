@@ -188,3 +188,35 @@ ul.inline {
 		}
 	}
 }
+
+.btn-twitter, .btn-fb, .btn-gplus, .btn-yt {
+	background: url(/img/buttons.png) no-repeat;
+	text-indent: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	margin: 0 20px;
+}
+
+.btn-twitter {
+	background-position: 0 0;
+	width: 76px;
+	height: 76px;
+}
+
+.btn-fb {
+	background-position: -76px 0;
+	width: 76px;
+	height: 76px;
+}
+
+.btn-gplus {
+	background-position: -152px 0;
+	width: 76px;
+	height: 76px;
+}
+
+.btn-yt {
+	background-position: -228px 0;
+	width: 76px;
+	height: 76px;
+}
