@@ -1,3 +1,0 @@
-# Foo
-
-Eine andere Seite.
