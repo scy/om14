@@ -29,7 +29,7 @@ Dienstanbieter dieser Seite ist die Piratenpartei Deutschland, vertreten durch d
 	Pflugstraße 9a
 	10115 Berlin
 	E-Mail: wgb@piratenpartei.de
-	Geschäftsführung: TODO TODO
+	Geschäftsführung: Veronique Schmitz
 	Steuernummer: DE 285069648
 	Finanzamt: Berlin
 
