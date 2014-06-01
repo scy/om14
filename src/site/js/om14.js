@@ -1,7 +1,25 @@
+(function () {
+	window._paq = window._paq || [];
+	_paq.push(['enableLinkTracking']);
+	(function () {
+		var u = (("https:" == document.location.protocol) ? "https" : "http") + "://stats.openmind-konferenz.de/piwik/";
+		_paq.push(['setTrackerUrl', u + 'piwik.php']);
+		_paq.push(['setSiteId', 1]);
+		var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+		g.type = 'text/javascript';
+		g.defer = true;
+		g.async = true;
+		g.src = u + 'piwik.js';
+		s.parentNode.insertBefore(g, s);
+	})();
+})();
+
 jQuery(function ($) {
 	"use strict";
 
 	var $header = $("#header");
+
+	var hasCanvas = "no";
 
 	// Inspired by <http://stackoverflow.com/a/19129822/417040>, Ken Fyrstenberg Nilsen, Abdias Software, CC3.0-attribute
 	var om14pixel = function ($container, src, px) {
@@ -57,6 +75,10 @@ jQuery(function ($) {
 
 	// If we have a header image and canvas support, do the fancy pixelation stuff. Else, the fallback CSS applies.
 	if ($header.length && Modernizr.canvas) {
+		hasCanvas = "yes";
 		om14pixel($header, "/img/header.jpg", 10);
 	}
+	_paq.push(["setCustomVariable", 1, "hasJS", "yes", "visit"]);
+	_paq.push(["setCustomVariable", 2, "hasCanvas", hasCanvas, "visit"]);
+	_paq.push(['trackPageView']);
 });
