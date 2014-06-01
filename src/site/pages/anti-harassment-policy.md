@@ -1,4 +1,4 @@
-# Anti-Harassment-Policy
+# Anti-Harass&shy;ment-Policy
 
 Die openmind-Konferenz ist darin engagiert, für alle Menschen eine belästigungsfreie Konferenzerfahrung zu bieten, egal welches Geschlecht, welches Gender, welche sexuelle Orientierung, physische Erscheinung, Körperbehinderung, Körpergröße, Hautfarbe oder Religion ein Mensch, der die Konferenz besucht, besitzt.
 
