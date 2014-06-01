@@ -81,6 +81,13 @@ gulp.task("html", function () {
 			if (!page.isHome) {
 				$("#header").remove();
 			}
+			// Set Piwik <noscript> fallback image URL.
+			$("noscript img").attr("src", "//stats.openmind-konferenz.de/piwik/piwik.php?idsite=1&rec=1&_cvar="
+				+ encodeURIComponent(JSON.stringify({
+						1: ["hasJS", "no"],
+						2: ["hasCanvas", "no"]
+					}))
+			);
 			// Make "page" available as JS variable on the page itself.
 			$("#pageinfo").html("window.pageinfo = " + JSON.stringify(page) + ";");
 			done();
