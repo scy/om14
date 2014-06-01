@@ -32,9 +32,10 @@ var site = {
     title: "openmind #om14"
 };
 
-gulp.task("clean", function () {
+gulp.task("clean", function (done) {
 	gulp.src(opts.clean, { read: false })
 		.pipe(clean());
+	done();
 });
 
 gulp.task("assets", function () {
