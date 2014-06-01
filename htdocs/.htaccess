@@ -1,0 +1,21 @@
+<IfModule mod_headers.c>
+	Header unset ETag
+</IfModule>
+FileETag None
+
+<IfModule mod_expires.c>
+	ExpiresActive on
+	ExpiresDefault "access plus 0 seconds"
+
+	# Media
+	ExpiresByType image/x-icon "access plus 1 week"
+	ExpiresByType image/jpeg   "access plus 1 week"
+	ExpiresByType image/png    "access plus 1 week"
+
+	# Webfonts
+	ExpiresByType application/font-woff         "access plus 1 month"
+	ExpiresByType application/vnd.ms-fontobject "access plus 1 month"
+	ExpiresByType application/x-font-ttf        "access plus 1 month"
+	ExpiresByType font/opentype                 "access plus 1 month"
+	ExpiresByType image/svg+xml                 "access plus 1 month"
+</IfModule>
