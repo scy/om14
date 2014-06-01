@@ -71,6 +71,12 @@ gulp.task("html", function () {
 			this.push(file);
 			return cb();
 		}))
+		.pipe(cheerio(function ($, done) {
+			if (!data.meta.isHome) {
+				$("#header").remove();
+			}
+			done();
+		}))
 		.pipe(gulp.dest(opts.docroot));
 });
 
