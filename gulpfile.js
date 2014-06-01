@@ -3,12 +3,14 @@ var gulp     = require("gulp")
   , clean    = require("gulp-clean")
   , concat   = require("gulp-concat")
   , ecstatic = require("ecstatic")
+  , fs       = require("fs")
   , http     = require("http")
   , marked   = require("gulp-marked")
   , sass     = require("gulp-sass")
   , ssg      = require("gulp-ssg")
+  , template = require("lodash").template
+  , through  = require("through2")
   , uglify   = require("gulp-uglify")
-  , wrap     = require("gulp-wrap")
   ;
 
 var opts = {
@@ -28,10 +30,6 @@ var opts = {
   , favSrc:   "src/site/favicons/**"
 };
 
-var site = {
-    title: "openmind #om14"
-};
-
 gulp.task("clean", function (done) {
 	gulp.src(opts.clean, { read: false })
 		.pipe(clean());
@@ -48,7 +46,7 @@ gulp.task("assets", function () {
 });
 
 gulp.task("html", function () {
-	var data = {};
+	var data = {}, tplFile = fs.readFileSync(opts.template, "UTF-8");
 	gulp.src(opts.pages)
 		.pipe(marked())
 		.pipe(cheerio(function ($, done) {
@@ -61,8 +59,18 @@ gulp.task("html", function () {
 			});
 			done();
 		}))
-		.pipe(wrap({ src: opts.template }, data))
-		.pipe(ssg(site))
+		.pipe(ssg({}))
+		.pipe(through.obj(function (file, enc, cb) {
+			if (file.isBuffer) {
+				data.meta = file.meta;
+				file.contents = new Buffer(template(tplFile, {
+					contents: file.contents,
+					data: data
+				}));
+			}
+			this.push(file);
+			return cb();
+		}))
 		.pipe(gulp.dest(opts.docroot));
 });
 

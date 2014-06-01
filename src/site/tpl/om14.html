@@ -5,7 +5,7 @@
 	<meta charset="utf-8" />
 	<script src="/om14-head.js"></script>
 	<link rel="stylesheet" href="/om14.css" />
-	<title><% if (title) { %><%= title %> – <% } %>openmind #om14</title>
+	<title><% if (data.title) { %><%= data.title %> – <% } %>openmind #om14</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png" />
 	<link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png" />
@@ -45,7 +45,7 @@
 	<li><a href="https://plus.google.com/118100230661845993722/posts" class="btn-gplus">Google+</a></li>
 </ul></div>
 <script src="/om14-foot.js"></script>
-<% if (title) { %><script>_paq.push(["setDocumentTitle", "<%= title %>"]);</script><% } %>
+<% if (data.title) { %><script>_paq.push(["setDocumentTitle", "<%= data.title %>"]);</script><% } %>
 <noscript><img src='http://stats.openmind-konferenz.de/piwik/piwik.php?idsite=1&rec=1&_cvar=%7B%221%22%3A%5B%22hasJS%22%2C%22no%22%5D%2C%222%22%3A%5B%22hasCanvas%22%2C%22no%22%5D%7D' style="border:0;" alt="" /></noscript>
 </body>
 

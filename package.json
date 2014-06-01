@@ -27,7 +27,8 @@
 		"gulp-sass":     "^0.7.1",
 		"gulp-ssg":      "^0.4.5",
 		"gulp-uglify":   "^0.3.0",
-		"gulp-wrap":     "^0.3.0",
-		"normalize.css": "^3.0.1"
+		"normalize.css": "^3.0.1",
+		"lodash":        "^2.4.1",
+		"through2":      "^0.4.2"
 	}
 }
