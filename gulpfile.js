@@ -30,6 +30,8 @@ var opts = {
   , favSrc:   "src/site/favicons/**"
 };
 
+var ts = new Date().getTime();
+
 gulp.task("clean", function (done) {
 	gulp.src(opts.clean, { read: false })
 		.pipe(clean());
@@ -56,7 +58,8 @@ gulp.task("html", function () {
 					name: file.meta.name,
 					isHome: file.meta.isHome,
 					isIndex: file.meta.isIndex,
-					url: file.meta.url
+					url: file.meta.url,
+					ts: ts
 				};
 				file.contents = new Buffer(template(tplFile, {
 					contents: file.contents,
@@ -88,6 +91,13 @@ gulp.task("html", function () {
 						2: ["hasCanvas", "no"]
 					}))
 			);
+			// Insert timestamp into some resources for cachebusting. Will be rewritten by .htaccess.
+			$('script[src], link[rel="stylesheet"]').each(function (idx, el) {
+				var $el = $(el), attr = el.name == "script" ? "src" : "href";
+				var url = $el.attr(attr);
+				url = url.replace(/^(\/[^/]+)(\.(?:js|css))$/, "$1." + ts + "$2");
+				$el.attr(attr, url);
+			});
 			// Make "page" available as JS variable on the page itself.
 			$("#pageinfo").html("window.pageinfo = " + JSON.stringify(page) + ";");
 			done();
