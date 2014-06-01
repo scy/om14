@@ -46,35 +46,43 @@ gulp.task("assets", function () {
 });
 
 gulp.task("html", function () {
-	var data = {}, tplFile = fs.readFileSync(opts.template, "UTF-8");
+	var page = {}, tplFile = fs.readFileSync(opts.template, "UTF-8");
 	gulp.src(opts.pages)
 		.pipe(marked())
-		.pipe(cheerio(function ($, done) {
-			var $h1 = $("h1"); // all <h1> elements
-			data.title = $h1.first().text(); // set the title to the text of the first <h1>
-			// Add a wrapper span inside every <h1>.
-			$h1.each(function (idx, el) {
-				var $el = $(el);
-				$el.html('<span class="wrapper">' + $el.html() + '</span>');
-			});
-			done();
-		}))
 		.pipe(ssg({}))
 		.pipe(through.obj(function (file, enc, cb) {
 			if (file.isBuffer) {
-				data.meta = file.meta;
+				page = {
+					name: file.meta.name,
+					isHome: file.meta.isHome,
+					isIndex: file.meta.isIndex,
+					url: file.meta.url
+				};
 				file.contents = new Buffer(template(tplFile, {
 					contents: file.contents,
-					data: data
+					page: page
 				}));
 			}
 			this.push(file);
 			return cb();
 		}))
 		.pipe(cheerio(function ($, done) {
-			if (!data.meta.isHome) {
+			var $h1 = $("h1"); // all <h1> elements
+			page.title = $h1.first().text(); // text of the first <h1>
+			// Set title tag.
+			var $title = $("title").first();
+			$title.text(page.title + " – " + $title.text());
+			// Add a wrapper span inside every <h1>.
+			$h1.each(function (idx, el) {
+				var $el = $(el);
+				$el.html('<span class="wrapper">' + $el.html() + '</span>');
+			});
+			// Remove header if not on the homepage.
+			if (!page.isHome) {
 				$("#header").remove();
 			}
+			// Make "page" available as JS variable on the page itself.
+			$("#pageinfo").html("window.pageinfo = " + JSON.stringify(page) + ";");
 			done();
 		}))
 		.pipe(gulp.dest(opts.docroot));
