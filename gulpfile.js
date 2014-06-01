@@ -25,6 +25,7 @@ var opts = {
   , imgDest:  "htdocs/img"
   , fontSrc:  "src/site/fonts/**"
   , fontDest: "htdocs/fonts"
+  , favSrc:   "src/site/favicons/**"
 };
 
 var site = {
@@ -41,6 +42,8 @@ gulp.task("assets", function () {
 		.pipe(gulp.dest(opts.imgDest));
 	gulp.src(opts.fontSrc)
 		.pipe(gulp.dest(opts.fontDest));
+	gulp.src(opts.favSrc)
+		.pipe(gulp.dest(opts.docroot));
 });
 
 gulp.task("html", function () {
