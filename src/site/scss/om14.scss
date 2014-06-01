@@ -149,15 +149,16 @@ nav {
 
 #content {
 	@include dejaweb;
-	width: 940px;
+	max-width: 940px;
 	margin: 0 auto;
+	padding: 0 20px;
 	color: $textColor;
 }
 
 h1 {
 	@include politics;
 	text-align: center;
-	margin: 40px 0;
+	margin: 50px 0 40px 0;
 
 	span.wrapper {
 		display: inline-block;
@@ -173,6 +174,11 @@ h2 {
 	color: #000;
 }
 
+a {
+	color: #086c29;
+	text-decoration: underline;
+}
+
 ul.inline {
 	margin: 0;
 	padding: 0;
@@ -185,8 +191,13 @@ ul.inline {
 		a {
 			display: inline-block;
 			text-decoration: none;
+			white-space: nowrap;
 		}
 	}
+}
+
+#buttons {
+	margin: 80px 0;
 }
 
 .btn-twitter, .btn-fb, .btn-gplus, .btn-yt {
