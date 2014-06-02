@@ -1,34 +1,36 @@
 {
-	"name":         "om14",
-	"version":      "0.1.0",
-	"description":  "Web site of the openmind #om14 conference",
-	"repository":   {
+	"name":            "om14",
+	"version":         "0.1.0",
+	"description":     "Web site of the openmind #om14 conference",
+	"repository":      {
 		"type": "git",
 		"url":  "https://github.com/scy/om14.git"
 	},
-	"keywords":     [
+	"keywords":        [
 		"conference",
 		"website",
 		"om14"
 	],
-	"author":       "Tim Weber",
-	"bugs":         {
+	"author":          "Tim Weber",
+	"bugs":            {
 		"url": "https://github.com/scy/om14/issues"
 	},
-	"license":      "BSD-3-Clause",
-	"homepage":     "http://14.openmind-konferenz.de/",
-	"dependencies": {
-		"ecstatic":            "^0.5.3",
-		"gulp":                "^3.6.2",
-		"gulp-cheerio":        "^0.3.1",
-		"gulp-clean":          "^0.2.4",
-		"gulp-concat":         "^2.2.0",
-		"gulp-marked":         "^0.2.0",
-		"gulp-sass":           "^0.7.1",
-		"gulp-ssg":            "^0.4.5",
-		"gulp-uglify":         "^0.3.0",
-		"normalize.css":       "^3.0.1",
-		"lodash":              "^2.4.1",
-		"through2":            "^0.4.2"
+	"license":         "BSD-3-Clause",
+	"homepage":        "http://14.openmind-konferenz.de/",
+	"dependencies":    {
+		"gulp":          "^3.6.2",
+		"gulp-cheerio":  "^0.3.1",
+		"gulp-clean":    "^0.2.4",
+		"gulp-concat":   "^2.2.0",
+		"gulp-marked":   "^0.2.0",
+		"gulp-sass":     "^0.7.1",
+		"gulp-ssg":      "^0.4.5",
+		"gulp-uglify":   "^0.3.0",
+		"normalize.css": "^3.0.1",
+		"lodash":        "^2.4.1",
+		"through2":      "^0.4.2"
+	},
+	"devDependencies": {
+		"node-static": "^0.7.3"
 	}
 }

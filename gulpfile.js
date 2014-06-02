@@ -2,7 +2,6 @@ var gulp     = require("gulp")
   , cheerio  = require("gulp-cheerio")
   , clean    = require("gulp-clean")
   , concat   = require("gulp-concat")
-  , ecstatic = require("ecstatic")
   , fs       = require("fs")
   , http     = require("http")
   , marked   = require("gulp-marked")
@@ -215,11 +214,22 @@ envtask("", [ "*-assets", "*-html", "*-css", "*-js" ]);
 
 gulp.task("watch", function () {
 	var files = allfiles("stage");
-	http.createServer(ecstatic({
-		root: file("docroot", "stage"),
-		defaultExt: "html", // https://github.com/jesusabdullah/node-ecstatic/issues/108
-		autoIndex: true
-	})).listen(8014);
+	var cbmatch = /^(\/[^\/]+\.)\d+\.(js|css)$/, cbreplace = "$1$2";
+	var stat = new (require("node-static").Server)(files.docroot, { cache: false });
+	require("http").createServer(function (req, res) {
+		req.addListener("end", function () {
+			stat.serve(req, res, function (e) {
+				if (e) {
+					if (e.status === 404 && req.url.match(cbmatch)) {
+						stat.serveFile(req.url.replace(cbmatch, cbreplace), 200, {}, req, res);
+					} else {
+						res.writeHead(e.status, e.headers);
+						res.end();
+					}
+				}
+			});
+		}).resume();
+	}).listen(8014);
 	gulp.watch([ files.imgSrc ], [ "stage-images" ]);
 	gulp.watch([ files.fontSrc ], [ "stage-fonts" ]);
 	gulp.watch([ files.favSrc ], [ "stage-favicons" ]);
