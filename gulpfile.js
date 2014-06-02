@@ -124,7 +124,14 @@ gulp.task("js", function () {
 		.pipe(concat("om14-head.js", { newLine: ";" }))
 		.pipe(gulp.dest(opts.docroot));
 	es.merge(
-		request(opts.piwikSrc).pipe(srcstr("piwik.js")),
+		request({
+			url: opts.piwikSrc,
+			timeout: 2000
+		}, function (err) {
+			if (err) {
+				throw err;
+			}
+		}).pipe(srcstr("piwik.js")),
 		gulp.src(opts.footJS)
 	)
 		.pipe(strfy(uglify()))
