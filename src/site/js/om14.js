@@ -2,8 +2,7 @@
 	window._paq = window._paq || [];
 	_paq.push(['enableLinkTracking']);
 	(function () {
-		var u = (("https:" == document.location.protocol) ? "https" : "http") + "://stats.openmind-konferenz.de/piwik/";
-		_paq.push(['setTrackerUrl', u + 'piwik.php']);
+		_paq.push(['setTrackerUrl', 'https://stats.openmind-konferenz.de/piwik/piwik.php']);
 		_paq.push(['setSiteId', pageinfo.piwikID]);
 	})();
 })();

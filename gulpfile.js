@@ -94,7 +94,7 @@ gulp.task("html", function () {
 				$("#header").remove();
 			}
 			// Set Piwik <noscript> fallback image URL.
-			$("noscript img").attr("src", "//stats.openmind-konferenz.de/piwik/piwik.php?idsite="
+			$("noscript img").attr("src", "https://stats.openmind-konferenz.de/piwik/piwik.php?idsite="
 				+ page.piwikID + "&rec=1&_cvar="
 				+ encodeURIComponent(JSON.stringify({
 						1: ["hasJS", "no"],
