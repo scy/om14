@@ -19,7 +19,6 @@
 	"homepage":     "http://14.openmind-konferenz.de/",
 	"dependencies": {
 		"ecstatic":            "^0.5.3",
-		"event-stream":        "^3.1.5",
 		"gulp":                "^3.6.2",
 		"gulp-cheerio":        "^0.3.1",
 		"gulp-clean":          "^0.2.4",
@@ -27,12 +26,9 @@
 		"gulp-marked":         "^0.2.0",
 		"gulp-sass":           "^0.7.1",
 		"gulp-ssg":            "^0.4.5",
-		"gulp-streamify":      "0.0.5",
 		"gulp-uglify":         "^0.3.0",
 		"normalize.css":       "^3.0.1",
 		"lodash":              "^2.4.1",
-		"request":             "^2.36.0",
-		"through2":            "^0.4.2",
-		"vinyl-source-stream": "^0.1.1"
+		"through2":            "^0.4.2"
 	}
 }

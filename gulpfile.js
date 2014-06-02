@@ -3,15 +3,11 @@ var gulp     = require("gulp")
   , clean    = require("gulp-clean")
   , concat   = require("gulp-concat")
   , ecstatic = require("ecstatic")
-  , es       = require("event-stream")
   , fs       = require("fs")
   , http     = require("http")
   , marked   = require("gulp-marked")
-  , request  = require("request")
   , sass     = require("gulp-sass")
-  , srcstr   = require("vinyl-source-stream")
   , ssg      = require("gulp-ssg")
-  , strfy    = require("gulp-streamify")
   , template = require("lodash").template
   , through  = require("through2")
   , uglify   = require("gulp-uglify")
@@ -123,19 +119,9 @@ gulp.task("js", function () {
 		.pipe(uglify())
 		.pipe(concat("om14-head.js", { newLine: ";" }))
 		.pipe(gulp.dest(opts.docroot));
-	es.merge(
-		request({
-			url: opts.piwikSrc,
-			timeout: 2000
-		}, function (err) {
-			if (err) {
-				throw err;
-			}
-		}).pipe(srcstr("piwik.js")),
-		gulp.src(opts.footJS)
-	)
-		.pipe(strfy(uglify()))
-		.pipe(strfy(concat("om14-foot.js", { newLine: ";" })))
+	gulp.src(opts.footJS)
+		.pipe(uglify())
+		.pipe(concat("om14-foot.js", { newLine: ";" }))
 		.pipe(gulp.dest(opts.docroot));
 });
 
