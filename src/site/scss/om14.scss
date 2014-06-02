@@ -199,6 +199,12 @@ h1 {
 	}
 }
 
+@media (max-width: 500px) {
+	h1 span.wrapper {
+		max-width: 100%;
+	}
+}
+
 h2 {
 	@include politics;
 	color: #000;
