@@ -13,51 +13,117 @@ var gulp     = require("gulp")
   , uglify   = require("gulp-uglify")
   ;
 
-var opts = {
-    docroot:  "htdocs"
-  , clean:    [ "htdocs/!(.gitignore)" ]
-  , pages:    "src/site/pages/**/*.md"
-  , template: "src/site/tpl/om14.html"
-  , scss:     "src/site/scss/om14.scss"
-  , allSCSS:  "src/site/scss/**"
-  , headJS:   "src/site/js/*modernizr*"
-  , footJS:   "src/site/js/!(*modernizr*)"
-  , allJS:    "src/site/js/**"
-  , imgSrc:   "src/site/img/**"
-  , imgDest:  "htdocs/img"
-  , fontSrc:  "src/site/fonts/**"
-  , fontDest: "htdocs/fonts"
-  , favSrc:   "src/site/favicons/**"
-  , piwikSrc: "http://stats.openmind-konferenz.de/piwik/piwik.js"
+var files = {
+	docroot: "env/%/htdocs",
+	src: "src/site",
+	build: "build/_all",
+	pages: ">pages/**/*.md",
+	template: ">tpl/om14.html",
+	scssSrc: ">scss/om14.scss",
+	scssBuild: "*/css",
+	scssDest: "/",
+	headJSSrc: ">js/*modernizr*",
+	headJSBuild: "*/headjs",
+	headJSDest: "/",
+	footJSSrc: ">js/!(*modernizr*)",
+	footJSBuild: "*/footjs",
+	footJSDest: "/",
+	favSrc: ">favicons/**",
+	fontSrc: ">fonts/**",
+	fontDest: "/fonts",
+	imgSrc: ">img/**",
+	imgDest: "/img",
+	htaccessSrc: ">.htaccess"
+};
+
+var piwikIDs = {
+	stage: 1,
+	live: 1 // FIXME: update as soon as created
+};
+
+var file = function (key, env) {
+	if (!key in files) {
+		throw new Error("no such file key: " + key);
+	}
+	return files[key]
+		.replace(/^\//, files.docroot + "/")
+		.replace(/^>/, files.src + "/")
+		.replace(/^\*/, files.build + "/")
+		.replace(/%/g, typeof env === "string" ? env : "_unknown")
+		;
+};
+
+var allfiles = function (env) {
+	var obj = {};
+	for (var key in files) {
+		obj[key] = file(key, env);
+	}
+	return obj;
+};
+
+var envtask = function (name, a, b) {
+	var deps = [], func = function () {};
+	if (typeof b === "undefined") {
+		if (typeof a === "function") {
+			func = a;
+		} else {
+			deps = a;
+		}
+	} else {
+		deps = a; func = b;
+	}
+	var envs = ["stage", "live"], depcollect = [];
+	envs.forEach(function (env) {
+		var taskname = env + (name === "" ? "" : ("-" + name)), thisobj = allfiles(env);
+		var envdeps = deps.map(function (dep) {
+			return dep.replace(/^\*-/, env + "-");
+		});
+		thisobj.env = env;
+		thisobj.file = function (key) {
+			return file(key, env);
+		};
+		gulp.task(taskname, envdeps, (function (that) {
+			return function () {
+				return func.apply(that);
+			};
+		})(thisobj));
+		depcollect.push(taskname);
+	});
+	gulp.task(name === "" ? "all" : name, depcollect);
 };
 
 var ts = new Date().getTime();
 
 gulp.task("clean", function () {
-	return gulp.src(opts.clean, { read: false })
+	return gulp.src([ "build", "env" ], { read: false })
 		.pipe(clean());
 });
 
-gulp.task("images", function () {
-	return gulp.src(opts.imgSrc)
-		.pipe(gulp.dest(opts.imgDest));
+envtask("images", function () {
+	return gulp.src(this.imgSrc)
+		.pipe(gulp.dest(this.imgDest));
 });
 
-gulp.task("fonts", function () {
-	return gulp.src(opts.fontSrc)
-		.pipe(gulp.dest(opts.fontDest));
+envtask("fonts", function () {
+	return gulp.src(this.fontSrc)
+		.pipe(gulp.dest(this.fontDest));
 });
 
-gulp.task("favicons", function () {
-	return gulp.src(opts.favSrc)
-		.pipe(gulp.dest(opts.docroot));
+envtask("favicons", function () {
+	return gulp.src(this.favSrc)
+		.pipe(gulp.dest(this.docroot));
 });
 
-gulp.task("assets", [ "images", "fonts", "favicons" ]);
+envtask("htaccess", function () {
+	return gulp.src(this.htaccessSrc)
+		.pipe(gulp.dest(this.docroot));
+});
 
-gulp.task("html", function () {
-	var page = {}, tplFile = fs.readFileSync(opts.template, "UTF-8");
-	return gulp.src(opts.pages)
+envtask("assets", [ "*-images", "*-fonts", "*-favicons", "*-htaccess" ]);
+
+envtask("html", function () {
+	var env = this.env, page = {}, tplFile = fs.readFileSync(this.template, "UTF-8");
+	return gulp.src(this.pages)
 		.pipe(marked())
 		.pipe(ssg({}))
 		.pipe(through.obj(function (file, enc, cb) {
@@ -68,7 +134,8 @@ gulp.task("html", function () {
 					isIndex: file.meta.isIndex,
 					url: file.meta.url,
 					ts: ts,
-					piwikID: 1
+					env: env,
+					piwikID: piwikIDs[env]
 				};
 				file.contents = new Buffer(template(tplFile, {
 					contents: file.contents,
@@ -95,8 +162,8 @@ gulp.task("html", function () {
 			}
 			// Set Piwik <noscript> fallback image URL.
 			$("noscript img").attr("src", "https://stats.openmind-konferenz.de/piwik/piwik.php?idsite="
-				+ page.piwikID + "&rec=1&_cvar="
-				+ encodeURIComponent(JSON.stringify({
+					+ page.piwikID + "&rec=1&_cvar="
+					+ encodeURIComponent(JSON.stringify({
 						1: ["hasJS", "no"],
 						2: ["hasCanvas", "no"]
 					}))
@@ -112,45 +179,55 @@ gulp.task("html", function () {
 			$("#pageinfo").html("window.pageinfo = " + JSON.stringify(page) + ";");
 			done();
 		}))
-		.pipe(gulp.dest(opts.docroot));
+		.pipe(gulp.dest(this.docroot));
 });
 
-gulp.task("css", function () {
-	return gulp.src(opts.scss)
+gulp.task("build-css", function () {
+	return gulp.src(file("scssSrc"))
 		.pipe(sass({
 			outputStyle: "compressed"
 		}))
-		.pipe(gulp.dest(opts.docroot));
+		.pipe(gulp.dest(file("scssBuild")));
 });
 
-gulp.task("headjs", function () {
-	return gulp.src(opts.headJS)
-		.pipe(uglify())
-		.pipe(concat("om14-head.js", { newLine: ";" }))
-		.pipe(gulp.dest(opts.docroot));
+envtask("css", [ "build-css" ], function () {
+	return gulp.src(this.scssBuild + "/**")
+		.pipe(gulp.dest(this.scssDest));
 });
 
-gulp.task("footjs", function () {
-	return gulp.src(opts.footJS)
-		.pipe(uglify())
-		.pipe(concat("om14-foot.js", { newLine: ";" }))
-		.pipe(gulp.dest(opts.docroot));
+["head", "foot"].forEach(function (part) {
+	gulp.task("build-" + part + "js", function () {
+		return gulp.src(file(part + "JSSrc"))
+			.pipe(uglify())
+			.pipe(concat("om14-" + part + ".js", { newLine: ";" }))
+			.pipe(gulp.dest(file(part + "JSBuild")));
+	});
+
+	envtask(part + "js", [ "build-" + part + "js" ], function () {
+		return gulp.src(this[part + "JSBuild"] + "/**")
+			.pipe(gulp.dest(this[part + "JSDest"]));
+	});
 });
 
-gulp.task("js", [ "headjs", "footjs" ]);
+envtask("js", [ "*-headjs", "*-footjs" ]);
 
-gulp.task("all", [ "assets", "html", "css", "js" ]);
+envtask("", [ "*-assets", "*-html", "*-css", "*-js" ]);
 
 gulp.task("watch", function () {
+	var files = allfiles("stage");
 	http.createServer(ecstatic({
-		root: opts.docroot,
+		root: file("docroot", "stage"),
 		defaultExt: "html", // https://github.com/jesusabdullah/node-ecstatic/issues/108
 		autoIndex: true
 	})).listen(8014);
-	gulp.watch([ opts.imgSrc ], [ "assets" ]);
-	gulp.watch([ opts.pages, opts.template ], [ "html" ]);
-	gulp.watch([ opts.allSCSS ], [ "css" ]);
-	gulp.watch([ opts.allJS ], [ "js" ]);
+	gulp.watch([ files.imgSrc ], [ "stage-images" ]);
+	gulp.watch([ files.fontSrc ], [ "stage-fonts" ]);
+	gulp.watch([ files.favSrc ], [ "stage-favicons" ]);
+	gulp.watch([ files.htaccessSrc ], [ "stage-htaccess" ]);
+	gulp.watch([ files.pages, files.template ], [ "stage-htaccess" ]);
+	gulp.watch([ "src/site/scss/**" ], [ "stage-css" ]);
+	gulp.watch([ files.headJSSrc ], [ "stage-headjs" ]);
+	gulp.watch([ files.footJSSrc ], [ "stage-footjs" ]);
 });
 
-gulp.task("default", [ "all", "watch" ]);
+gulp.task("default", [ "stage", "watch" ]);
