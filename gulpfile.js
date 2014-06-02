@@ -38,7 +38,7 @@ var files = {
 
 var piwikIDs = {
 	stage: 1,
-	live: 1 // FIXME: update as soon as created
+	live: 2
 };
 
 var file = function (key, env) {
