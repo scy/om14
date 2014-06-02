@@ -33,24 +33,31 @@ var opts = {
 
 var ts = new Date().getTime();
 
-gulp.task("clean", function (done) {
-	gulp.src(opts.clean, { read: false })
+gulp.task("clean", function () {
+	return gulp.src(opts.clean, { read: false })
 		.pipe(clean());
-	done();
 });
 
-gulp.task("assets", function () {
-	gulp.src(opts.imgSrc)
+gulp.task("images", function () {
+	return gulp.src(opts.imgSrc)
 		.pipe(gulp.dest(opts.imgDest));
-	gulp.src(opts.fontSrc)
+});
+
+gulp.task("fonts", function () {
+	return gulp.src(opts.fontSrc)
 		.pipe(gulp.dest(opts.fontDest));
-	gulp.src(opts.favSrc)
+});
+
+gulp.task("favicons", function () {
+	return gulp.src(opts.favSrc)
 		.pipe(gulp.dest(opts.docroot));
 });
 
+gulp.task("assets", [ "images", "fonts", "favicons" ]);
+
 gulp.task("html", function () {
 	var page = {}, tplFile = fs.readFileSync(opts.template, "UTF-8");
-	gulp.src(opts.pages)
+	return gulp.src(opts.pages)
 		.pipe(marked())
 		.pipe(ssg({}))
 		.pipe(through.obj(function (file, enc, cb) {
@@ -107,23 +114,28 @@ gulp.task("html", function () {
 });
 
 gulp.task("css", function () {
-	gulp.src(opts.scss)
+	return gulp.src(opts.scss)
 		.pipe(sass({
 			outputStyle: "compressed"
 		}))
 		.pipe(gulp.dest(opts.docroot));
 });
 
-gulp.task("js", function () {
-	gulp.src(opts.headJS)
+gulp.task("headjs", function () {
+	return gulp.src(opts.headJS)
 		.pipe(uglify())
 		.pipe(concat("om14-head.js", { newLine: ";" }))
 		.pipe(gulp.dest(opts.docroot));
-	gulp.src(opts.footJS)
+});
+
+gulp.task("footjs", function () {
+	return gulp.src(opts.footJS)
 		.pipe(uglify())
 		.pipe(concat("om14-foot.js", { newLine: ";" }))
 		.pipe(gulp.dest(opts.docroot));
 });
+
+gulp.task("js", [ "headjs", "footjs" ]);
 
 gulp.task("all", [ "assets", "html", "css", "js" ]);
 
