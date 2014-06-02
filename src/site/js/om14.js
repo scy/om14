@@ -4,7 +4,7 @@
 	(function () {
 		var u = (("https:" == document.location.protocol) ? "https" : "http") + "://stats.openmind-konferenz.de/piwik/";
 		_paq.push(['setTrackerUrl', u + 'piwik.php']);
-		_paq.push(['setSiteId', 1]);
+		_paq.push(['setSiteId', pageinfo.piwikID]);
 	})();
 })();
 

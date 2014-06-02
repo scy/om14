@@ -67,7 +67,8 @@ gulp.task("html", function () {
 					isHome: file.meta.isHome,
 					isIndex: file.meta.isIndex,
 					url: file.meta.url,
-					ts: ts
+					ts: ts,
+					piwikID: 1
 				};
 				file.contents = new Buffer(template(tplFile, {
 					contents: file.contents,
@@ -93,7 +94,8 @@ gulp.task("html", function () {
 				$("#header").remove();
 			}
 			// Set Piwik <noscript> fallback image URL.
-			$("noscript img").attr("src", "//stats.openmind-konferenz.de/piwik/piwik.php?idsite=1&rec=1&_cvar="
+			$("noscript img").attr("src", "//stats.openmind-konferenz.de/piwik/piwik.php?idsite="
+				+ page.piwikID + "&rec=1&_cvar="
 				+ encodeURIComponent(JSON.stringify({
 						1: ["hasJS", "no"],
 						2: ["hasCanvas", "no"]
