@@ -143,8 +143,38 @@ nav {
 	font-size: 25px;
 }
 
-#hashtag, #claim {
+#hashtag-and-claim {
 	text-shadow: #000 0 0 2px;
+}
+
+body.not-home {
+	#logo {
+		* {
+			// TODO: This is in preparation for having the logo on each page. Remove this block as soon as it’s finished.
+			display: none;
+		}
+		height: 24px;
+		padding-left: 24px;
+		img {
+			float: left;
+			height: 24px;
+			width: auto;
+		}
+	}
+
+	#hashtag-and-claim {
+		float: left;
+		padding-left: 10px;
+		margin-top: -4px;
+	}
+
+	#hashtag {
+		font-size: 20px;
+	}
+
+	#claim {
+		font-size: 6.25px;
+	}
 }
 
 #content {

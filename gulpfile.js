@@ -155,10 +155,6 @@ envtask("html", function () {
 				var $el = $(el);
 				$el.html('<span class="wrapper">' + $el.html() + '</span>');
 			});
-			// Remove header if not on the homepage.
-			if (!page.isHome) {
-				$("#header").remove();
-			}
 			// Set Piwik <noscript> fallback image URL.
 			$("noscript img").attr("src", "https://stats.openmind-konferenz.de/piwik/piwik.php?idsite="
 					+ page.piwikID + "&rec=1&_cvar="

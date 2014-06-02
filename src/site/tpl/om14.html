@@ -25,7 +25,7 @@
 	<meta name="msapplication-TileImage" content="/mstile-144x144.png" />
 </head>
 
-<body<% if (page.name) {%> id="page-<%= page.name %>"<% } %>>
+<body<% if (page.name) {%> id="page-<%= page.name %>"<% } %> class="<%= page.isHome ? "" : "not-" %>home">
 
 <nav><ul class="inline">
 	<li><a href="/">#om14</a></li>
@@ -37,7 +37,13 @@
 </ul></nav>
 
 <div id="header">
-	<div id="logo"><img src="/img/fist.png" alt="om14 Logo nach oben gestreckte Faust" width="224" height="240" /><div id="hashtag">#om14</div><div id="claim">macht doch anders!</div></div>
+	<div id="logo">
+		<img src="/img/fist.png" alt="om14 Logo nach oben gestreckte Faust" width="224" height="240" />
+		<div id="hashtag-and-claim">
+			<div id="hashtag">#om14</div>
+			<div id="claim">macht doch anders!</div>
+		</div>
+	</div>
 </div>
 
 <div id="content">
