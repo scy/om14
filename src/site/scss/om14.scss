@@ -154,7 +154,7 @@ body.not-home {
 			display: none;
 		}
 		height: 24px;
-		padding-left: 24px;
+		// padding-left: 24px; // FIXME: Causes scrolling. Disabled for now.
 		img {
 			float: left;
 			height: 24px;
