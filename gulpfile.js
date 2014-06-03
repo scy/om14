@@ -231,7 +231,7 @@ gulp.task("watch", function () {
 	gulp.watch([ files.favSrc ], [ "stage-favicons" ]);
 	gulp.watch([ files.htaccessSrc ], [ "stage-htaccess" ]);
 	gulp.watch([ files.pages, files.template ], [ "stage-html" ]);
-	gulp.watch([ "src/site/scss/**" ], [ "stage-css" ]);
+	gulp.watch([ "src/site/scss/**" ], [ "stage-css", "stage-html" ]);
 	gulp.watch([ files.headJSSrc ], [ "stage-headjs" ]);
 	gulp.watch([ files.footJSSrc ], [ "stage-footjs" ]);
 });
