@@ -1,6 +1,6 @@
 # Wann und wo
 
-Die #om14 findet statt vom 26. bis 28. September 2013 (Freitag bis Sonntag), wie üblich in der [Jugendherberge Kassel](http://www.djh-hessen.de/jugendherbergen/kassel/):
+Die #om14 findet statt vom 26. bis 28. September 2014 (Freitag bis Sonntag), wie üblich in der [Jugendherberge Kassel](http://www.djh-hessen.de/jugendherbergen/kassel/):
 
 	DJH Jugendherberge Kassel
 	Schenkendorfstraße 18
