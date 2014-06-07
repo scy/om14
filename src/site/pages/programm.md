@@ -6,8 +6,7 @@ Folgt uns auf [Twitter][], [Facebook][] oder [Google+][], um benachrichtigt zu w
 
 Du willst nen Vortrag, Workshop oder so einreichen?
 Yeah!
-Schreib’s dir auf, damit du’s nicht vergisst, wir sind leider noch nicht ganz so weit, um Einreichungen anzunehmen.
-Aber ganz ganz bald!
+Auf der [Einreichen](/einreichen/)-Seite findest du alle Infos darüber, wie das geht.
 
 [Twitter]: https://twitter.com/openmindkonf
 [Facebook]: https://www.facebook.com/openmind.konferenz
