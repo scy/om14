@@ -68,8 +68,8 @@ Ein Vortrag für die #om14 ist auf eine halbe, maximal eine Dreiviertelstunde au
 Ob du einen Vortrag oder Workshop allein oder in einer Gruppe halten möchtest, steht dir frei.
 Ausschlaggebend für die Auswahl deines Beitrags für die #om14 ist vor allem, dass er sich mit den oben formulierten Grundsatzfragen beschäftigt.
 
-Um ein Gefühl für die Themen der openmind zu gewinnen, lohnt sich auch ein Blick auf die Konferenzreader der letzten Jahre:
-[#om10 (PDF)](http://11.openmind-konferenz.de/wp-content/uploads/2012/01/om10-final-120106.pdf), [#om11](http://www.heise.de/tp/artikel/35/35722/1.html), [#om12](http://www.heise.de/tp/special/open/default.html).
+Um ein Gefühl für die Themen der openmind zu gewinnen, lohnt sich auch ein Blick auf die Konferenzreader und das Programm der letzten Jahre:
+[#om10 (PDF)](http://11.openmind-konferenz.de/wp-content/uploads/2012/01/om10-final-120106.pdf), [#om11](http://www.heise.de/tp/artikel/35/35722/1.html), [#om12](http://www.heise.de/tp/special/open/default.html), [#om13](https://pentabarf.junge-piraten.de/fahrplan/om13/events.de.html).
 
 ## Wie reiche ich meinen Beitrag ein?
 
