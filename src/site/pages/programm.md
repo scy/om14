@@ -1,8 +1,10 @@
 # Programm
 
-Das Programm der #om14 wird Mitte August veröffentlicht werden.
+**Das Programm der #om14 wird Mitte August veröffentlicht werden.**
 
-Folgt uns auf [Twitter][], [Facebook][] oder [Google+][], um benachrichtigt zu werden!
+Am Freitag (26.09.) wird es noch kein Vortragsprogramm geben, sondern das übliche lockere Get-Together, für das die openmind so bekannt ist.
+
+Folgt uns auf [Twitter][], [Facebook][] oder [Google+][], um benachrichtigt zu werden, sobald das Programm steht!
 
 Du willst nen Vortrag, Workshop oder so einreichen?
 Yeah!
