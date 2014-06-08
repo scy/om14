@@ -36,7 +36,7 @@ Wir helfen dir gern weiter.
 
 ## Was ist die #om14?
 
-Die #om14 ist eine Konferenz mit angeschlossenem Barcamp für Netzpolitiker*innen, -aktivist*innen und -philosoph*innen
+Die #om14 ist eine Konferenz mit angeschlossenem Barcamp für Netzpolitiker\*innen, -aktivist\*innen und -philosoph\*innen
 
 ## Wer veranstaltet die #om14?
 
