@@ -24,6 +24,7 @@
 		"gulp-concat":         "^2.2.0",
 		"gulp-marked":         "^0.2.0",
 		"gulp-sass":           "^0.7.1",
+		"gulp-shell":          "^0.2.5",
 		"gulp-spawn":          "^0.3.0",
 		"gulp-ssg":            "^0.4.5",
 		"gulp-uglify":         "^0.3.0",

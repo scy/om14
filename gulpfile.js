@@ -7,6 +7,7 @@ var gulp     = require("gulp")
   , marked   = require("gulp-marked")
   , request  = require("request")
   , sass     = require("gulp-sass")
+  , shell    = require("gulp-shell")
   , spawn    = require("gulp-spawn")
   , srcstr   = require("vinyl-source-stream")
   , ssg      = require("gulp-ssg")
@@ -226,6 +227,12 @@ gulp.task("install-composer", function () {
 			]
 		}));
 });
+
+gulp.task("install-php-deps", shell.task([
+	"./composer.phar install"
+], {
+	cwd: "src/shop"
+}));
 
 gulp.task("watch", function () {
 	var files = allfiles("stage");
