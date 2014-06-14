@@ -128,9 +128,9 @@ envtask("htaccess", function () {
 
 envtask("assets", [ "*-images", "*-fonts", "*-favicons", "*-htaccess" ]);
 
-envtask("html", function () {
+var htmlconvert = function (src) {
 	var env = this.env, page = {}, tplFile = fs.readFileSync(this.template, "UTF-8");
-	return gulp.src(this.pages)
+	return src
 		.pipe(marked())
 		.pipe(ssg({}))
 		.pipe(through.obj(function (file, enc, cb) {
@@ -182,6 +182,10 @@ envtask("html", function () {
 			$("#pageinfo").html("window.pageinfo = " + JSON.stringify(page) + ";");
 			done();
 		}))
+};
+
+envtask("html", function () {
+	return htmlconvert.call(this, gulp.src(this.pages))
 		.pipe(gulp.dest(this.docroot));
 });
 
