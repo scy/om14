@@ -128,18 +128,17 @@ envtask("htaccess", function () {
 
 envtask("assets", [ "*-images", "*-fonts", "*-favicons", "*-htaccess" ]);
 
-var htmlconvert = function (src) {
+var htmlconvert = function (src, metaOverride) {
 	var env = this.env, page = {}, tplFile = fs.readFileSync(this.template, "UTF-8");
 	return src
-		.pipe(marked())
-		.pipe(ssg({}))
 		.pipe(through.obj(function (file, enc, cb) {
+			var meta = metaOverride ? metaOverride : file.meta;
 			if (file.isBuffer) {
 				page = {
-					name: file.meta.name,
-					isHome: file.meta.isHome,
-					isIndex: file.meta.isIndex,
-					url: file.meta.url,
+					name: meta.name,
+					isHome: meta.isHome,
+					isIndex: meta.isIndex,
+					url: meta.url,
 					ts: ts,
 					env: env,
 					piwikID: piwikIDs[env]
@@ -185,7 +184,11 @@ var htmlconvert = function (src) {
 };
 
 envtask("html", function () {
-	return htmlconvert.call(this, gulp.src(this.pages))
+	return htmlconvert.call(this,
+		gulp.src(this.pages)
+			.pipe(marked())
+			.pipe(ssg({}))
+	)
 		.pipe(gulp.dest(this.docroot));
 });
 
