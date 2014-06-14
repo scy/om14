@@ -5,7 +5,10 @@ var gulp     = require("gulp")
   , fs       = require("fs")
   , http     = require("http")
   , marked   = require("gulp-marked")
+  , request  = require("request")
   , sass     = require("gulp-sass")
+  , spawn    = require("gulp-spawn")
+  , srcstr   = require("vinyl-source-stream")
   , ssg      = require("gulp-ssg")
   , template = require("lodash").template
   , through  = require("through2")
@@ -207,6 +210,18 @@ envtask("css", [ "build-css" ], function () {
 envtask("js", [ "*-headjs", "*-footjs" ]);
 
 envtask("", [ "*-assets", "*-html", "*-css", "*-js" ]);
+
+gulp.task("install-composer", function () {
+	request("https://getcomposer.org/installer", function (err) {
+		if (err) {
+			throw err;
+		}
+	})
+		.pipe(srcstr("composer-installer.php"))
+		.pipe(spawn({
+			cmd: "php"
+		}));
+});
 
 gulp.task("watch", function () {
 	var files = allfiles("stage");
