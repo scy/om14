@@ -219,7 +219,11 @@ gulp.task("install-composer", function () {
 	})
 		.pipe(srcstr("composer-installer.php"))
 		.pipe(spawn({
-			cmd: "php"
+			cmd: "php",
+			args: [
+			      "--",
+			      "--install-dir=src/shop"
+			]
 		}));
 });
 
