@@ -212,7 +212,7 @@ gulp.task("watch", function () {
 	var files = allfiles("stage");
 	var cbmatch = /^(\/[^\/]+\.)\d+\.(js|css)$/, cbreplace = "$1$2";
 	var stat = new (require("node-static").Server)(files.docroot, { cache: false });
-	require("http").createServer(function (req, res) {
+	http.createServer(function (req, res) {
 		req.addListener("end", function () {
 			stat.serve(req, res, function (e) {
 				if (e) {
