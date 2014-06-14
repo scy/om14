@@ -36,7 +36,11 @@ var files = {
 	fontDest: "/fonts",
 	imgSrc: ">img/**",
 	imgDest: "/img",
-	htaccessSrc: ">.htaccess"
+	htaccessSrc: ">.htaccess",
+	shopPrvSrc: "src/shop/vendor/**",
+	shopPrvDest: "env/%/vendor",
+	shopPubSrc: "src/shop/web/**",
+	shopPubDest: "/shop"
 };
 
 var piwikIDs = {
@@ -210,7 +214,7 @@ envtask("css", [ "build-css" ], function () {
 
 envtask("js", [ "*-headjs", "*-footjs" ]);
 
-envtask("", [ "*-assets", "*-html", "*-css", "*-js" ]);
+envtask("", [ "*-assets", "*-html", "*-css", "*-js", "*-shop" ]);
 
 gulp.task("install-composer", function () {
 	request("https://getcomposer.org/installer", function (err) {
@@ -232,7 +236,19 @@ gulp.task("install-php-deps", shell.task([
 	"./composer.phar install"
 ], {
 	cwd: "src/shop"
-}));
+}))
+
+envtask("shop-private", function () {
+	return gulp.src(this.shopPrvSrc)
+		.pipe(gulp.dest(this.shopPrvDest));
+});
+
+envtask("shop-public", function () {
+	return gulp.src(this.shopPubSrc)
+		.pipe(gulp.dest(this.shopPubDest));
+});
+
+envtask("shop", [ "*-shop-private", "*-shop-public" ]);
 
 gulp.task("watch", function () {
 	var files = allfiles("stage");
