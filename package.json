@@ -27,6 +27,7 @@
 		"gulp-shell":          "^0.2.5",
 		"gulp-spawn":          "^0.3.0",
 		"gulp-ssg":            "^0.4.5",
+		"gulp-template":       "^0.1.1",
 		"gulp-uglify":         "^0.3.0",
 		"normalize.css":       "^3.0.1",
 		"lodash":              "^2.4.1",

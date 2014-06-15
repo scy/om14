@@ -3,6 +3,7 @@ var gulp     = require("gulp")
   , clean    = require("gulp-clean")
   , concat   = require("gulp-concat")
   , fs       = require("fs")
+  , gtpl     = require("gulp-template")
   , http     = require("http")
   , marked   = require("gulp-marked")
   , request  = require("request")
@@ -40,7 +41,8 @@ var files = {
 	shopPrvSrc: "src/shop/vendor/**",
 	shopPrvDest: "env/%/vendor",
 	shopPubSrc: "src/shop/web/**",
-	shopPubDest: "/shop"
+	shopPubDest: "/shop",
+	shopTplDest: "env/%/views"
 };
 
 var piwikIDs = {
@@ -128,11 +130,48 @@ envtask("htaccess", function () {
 
 envtask("assets", [ "*-images", "*-fonts", "*-favicons", "*-htaccess" ]);
 
-var htmlconvert = function (src, metaOverride) {
+var om14cheerio = function (page) {
+	return cheerio(function ($, done) {
+		var $h1 = $("h1"); // all <h1> elements
+		if (!page.title) {
+			page.title = $h1.first().text(); // text of the first <h1>
+		}
+		// Set title tag.
+		var $title = $("title").first();
+		$title.text(page.title + " – " + $title.text());
+		// Add a wrapper span inside every <h1>.
+		$h1.each(function (idx, el) {
+			var $el = $(el);
+			$el.html('<span class="wrapper">' + $el.html() + '</span>');
+		});
+		// Set Piwik <noscript> fallback image URL.
+		$("noscript img").attr("src", "https://stats.openmind-konferenz.de/piwik/piwik.php?idsite="
+				+ page.piwikID + "&rec=1&_cvar="
+				+ encodeURIComponent(JSON.stringify({
+					1: ["hasJS", "no"],
+					2: ["hasCanvas", "no"]
+				}))
+		);
+		// Insert timestamp into some resources for cachebusting. Will be rewritten by .htaccess.
+		$('script[src], link[rel="stylesheet"]').each(function (idx, el) {
+			var $el = $(el), attr = el.name == "script" ? "src" : "href";
+			var url = $el.attr(attr);
+			url = url.replace(/^(\/[^/]+)(\.(?:js|css))$/, "$1." + ts + "$2");
+			$el.attr(attr, url);
+		});
+		// Make "page" available as JS variable on the page itself.
+		$("#pageinfo").html("window.pageinfo = " + JSON.stringify(page) + ";");
+		done();
+	});
+};
+
+envtask("html", function () {
 	var env = this.env, page = {}, tplFile = fs.readFileSync(this.template, "UTF-8");
-	return src
+	return gulp.src(this.pages)
+		.pipe(marked())
+		.pipe(ssg({}))
 		.pipe(through.obj(function (file, enc, cb) {
-			var meta = metaOverride ? metaOverride : file.meta;
+			var meta = file.meta;
 			if (file.isBuffer) {
 				page = {
 					name: meta.name,
@@ -151,44 +190,7 @@ var htmlconvert = function (src, metaOverride) {
 			this.push(file);
 			return cb();
 		}))
-		.pipe(cheerio(function ($, done) {
-			var $h1 = $("h1"); // all <h1> elements
-			page.title = $h1.first().text(); // text of the first <h1>
-			// Set title tag.
-			var $title = $("title").first();
-			$title.text(page.title + " – " + $title.text());
-			// Add a wrapper span inside every <h1>.
-			$h1.each(function (idx, el) {
-				var $el = $(el);
-				$el.html('<span class="wrapper">' + $el.html() + '</span>');
-			});
-			// Set Piwik <noscript> fallback image URL.
-			$("noscript img").attr("src", "https://stats.openmind-konferenz.de/piwik/piwik.php?idsite="
-					+ page.piwikID + "&rec=1&_cvar="
-					+ encodeURIComponent(JSON.stringify({
-						1: ["hasJS", "no"],
-						2: ["hasCanvas", "no"]
-					}))
-			);
-			// Insert timestamp into some resources for cachebusting. Will be rewritten by .htaccess.
-			$('script[src], link[rel="stylesheet"]').each(function (idx, el) {
-				var $el = $(el), attr = el.name == "script" ? "src" : "href";
-				var url = $el.attr(attr);
-				url = url.replace(/^(\/[^/]+)(\.(?:js|css))$/, "$1." + ts + "$2");
-				$el.attr(attr, url);
-			});
-			// Make "page" available as JS variable on the page itself.
-			$("#pageinfo").html("window.pageinfo = " + JSON.stringify(page) + ";");
-			done();
-		}))
-};
-
-envtask("html", function () {
-	return htmlconvert.call(this,
-		gulp.src(this.pages)
-			.pipe(marked())
-			.pipe(ssg({}))
-	)
+		.pipe(om14cheerio(page))
 		.pipe(gulp.dest(this.docroot));
 });
 
@@ -244,6 +246,27 @@ gulp.task("install-php-deps", shell.task([
 ], {
 	cwd: "src/shop"
 }))
+
+envtask("shop-template", function () {
+	var page = {
+		name: "shop",
+		isHome: false,
+		isIndex: false,
+		url: "/shop/",
+		ts: ts,
+		env: this.env,
+		piwikID: piwikIDs[this.env],
+		title: "{{ title }}"
+	};
+	return gulp.src(this.template)
+		.pipe(gtpl({
+			contents: "{{ contents }}",
+			page: page
+		}))
+		.pipe(om14cheerio(page))
+		.pipe(concat("om14-shop.twig")) // collapsing the one-file input set
+		.pipe(gulp.dest(this.shopTplDest));
+});
 
 envtask("shop-private", function () {
 	return gulp.src(this.shopPrvSrc)
