@@ -160,6 +160,10 @@ var om14cheerio = function (page) {
 			$el.attr(attr, url);
 		});
 		// Make "page" available as JS variable on the page itself.
+		if (page.jsTitle) {
+			page.title = page.jsTitle;
+			delete page.jsTitle;
+		}
 		$("#pageinfo").html("window.pageinfo = " + JSON.stringify(page) + ";");
 		done();
 	});
@@ -256,7 +260,8 @@ envtask("shop-template", function () {
 		ts: ts,
 		env: this.env,
 		piwikID: piwikIDs[this.env],
-		title: "{{ title }}"
+		title: "{{ title|escape }}",
+		jsTitle: "{{ title|escape('js') }}"
 	};
 	return gulp.src(this.template)
 		.pipe(gtpl({
