@@ -18,6 +18,7 @@ var gulp     = require("gulp")
   ;
 
 var files = {
+	envroot: "env/%",
 	docroot: "env/%/htdocs",
 	src: "src/site",
 	build: "build/_all",
@@ -37,12 +38,9 @@ var files = {
 	fontDest: "/fonts",
 	imgSrc: ">img/**",
 	imgDest: "/img",
-	htaccessSrc: ">.htaccess",
-	shopPrvSrc: "src/shop/vendor/**",
-	shopPrvDest: "env/%/vendor",
-	shopPubSrc: "src/shop/web/**",
-	shopPubDest: "/shop",
-	shopTplDest: "env/%/views"
+	shopPrvSrc: "src/shop/views/**",
+	shopPubSrc: "src/shop/web/{**,.htaccess}",
+	htaccessSrc: ">.htaccess"
 };
 
 var piwikIDs = {
@@ -227,10 +225,8 @@ envtask("css", [ "build-css" ], function () {
 
 envtask("js", [ "*-headjs", "*-footjs" ]);
 
-envtask("", [ "*-assets", "*-html", "*-css", "*-js", "*-shop" ]);
-
 gulp.task("install-composer", function () {
-	request("https://getcomposer.org/installer", function (err) {
+	return request("https://getcomposer.org/installer", function (err) {
 		if (err) {
 			throw err;
 		}
@@ -260,32 +256,39 @@ envtask("shop-template", function () {
 		ts: ts,
 		env: this.env,
 		piwikID: piwikIDs[this.env],
-		title: "{{ title|escape }}",
-		jsTitle: "{{ title|escape('js') }}"
+		title: "{% if title is defined %}{{ title|escape }} – {% endif %}Shop",
+		jsTitle: "{% if title is defined %}{{ title|escape('js') }} – {% endif %}Shop"
 	};
 	return gulp.src(this.template)
 		.pipe(gtpl({
-			contents: "{{ contents }}",
+			contents: "{% block content %}{% endblock %}",
 			page: page
 		}))
 		.pipe(om14cheerio(page))
-		.pipe(concat("om14-shop.twig")) // collapsing the one-file input set
-		.pipe(gulp.dest(this.shopTplDest));
+		.pipe(concat("om14.twig")) // collapsing the one-file input set
+		.pipe(gulp.dest(this.envroot + "/views"));
+});
+
+envtask("shop-vendor", function () {
+	return gulp.src("src/shop/vendor/**", {base: "src/shop"})
+		.pipe(gulp.dest(this.envroot));
 });
 
 envtask("shop-private", function () {
-	return gulp.src(this.shopPrvSrc)
-		.pipe(gulp.dest(this.shopPrvDest));
+	return gulp.src(this.shopPrvSrc, {base: "src/shop"})
+		.pipe(gulp.dest(this.envroot));
 });
 
 envtask("shop-public", function () {
-	return gulp.src(this.shopPubSrc)
-		.pipe(gulp.dest(this.shopPubDest));
+	return gulp.src(this.shopPubSrc, {base: "src/shop/web"})
+		.pipe(gulp.dest(this.docroot + "/shop"));
 });
 
-envtask("shop", [ "*-shop-private", "*-shop-public" ]);
+envtask("shop", [ "*-shop-vendor", "*-shop-private", "*-shop-template", "*-shop-public" ]);
 
-gulp.task("watch", function () {
+envtask("", [ "*-assets", "*-html", "*-css", "*-js", "*-shop" ]);
+
+var watch = function () {
 	var files = allfiles("stage");
 	var cbmatch = /^(\/[^\/]+\.)\d+\.(js|css)$/, cbreplace = "$1$2";
 	var stat = new (require("node-static").Server)(files.docroot, { cache: false });
@@ -309,8 +312,12 @@ gulp.task("watch", function () {
 	gulp.watch([ files.htaccessSrc ], [ "stage-htaccess" ]);
 	gulp.watch([ files.pages, files.template ], [ "stage-html" ]);
 	gulp.watch([ "src/site/scss/**" ], [ "stage-css", "stage-html" ]);
-	gulp.watch([ files.headJSSrc ], [ "stage-headjs" ]);
-	gulp.watch([ files.footJSSrc ], [ "stage-footjs" ]);
-});
+	gulp.watch([ files.headJSSrc ], [ "stage-headjs", "stage-html" ]);
+	gulp.watch([ files.footJSSrc ], [ "stage-footjs", "stage-html" ]);
+	gulp.watch([ files.shopPrvSrc ], [ "stage-shop-private" ]);
+	gulp.watch([ files.shopPubSrc ], [ "stage-shop-public" ]);
+};
+gulp.task("watch", watch);
+gulp.task("clean-watch", [ "clean" ], watch);
 
 gulp.task("default", [ "stage", "watch" ]);
