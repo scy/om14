@@ -1,0 +1,6 @@
+# Requires AllowOverride Indexes
+FallbackResource /shop/index.php
+
+# Seems to be a magic bugfix for hanging chunked responses:
+# http://serverfault.com/questions/559067/apache-hangs-for-five-seconds-with-fallbackresource-when-accessing
+DirectoryIndex index.php

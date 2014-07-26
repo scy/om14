@@ -38,7 +38,7 @@ var files = {
 	fontDest: "/fonts",
 	imgSrc: ">img/**",
 	imgDest: "/img",
-	shopPrvSrc: "src/shop/views/**",
+	shopPrvSrc: "src/shop/{OM14,views}/**",
 	shopPubSrc: "src/shop/web/{**,.htaccess}",
 	htaccessSrc: ">.htaccess"
 };
