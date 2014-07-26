@@ -2,6 +2,7 @@
 
 namespace OM14\Shop;
 
+use Igorw\Silex\ConfigServiceProvider;
 use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 
@@ -15,6 +16,13 @@ class Application {
 	}
 
 	protected function registerProviders() {
+		try {
+			$this->app->register(new ConfigServiceProvider(
+				__DIR__ . '/../../config.yml', array(), null, 'conf'
+			));
+		} catch (\InvalidArgumentException $e) {
+			// Config file could not be read. We'll fail later.
+		}
 		$this->app->register(new TwigServiceProvider(), array(
 			'twig.path' => __DIR__ . '/../../views',
 		));
@@ -64,6 +72,26 @@ class Application {
 			return $app['twig']->render('home.twig');
 		});
 		return $this;
+	}
+
+	public function getConfig($path) {
+		$conf = $this->app['conf'];
+		if (!is_array($conf)) {
+			throw new \Exception('no config loaded');
+		}
+		$pieces = explode('/', (string)$path);
+		$current = array();
+		foreach ($pieces as $piece) {
+			$current[] = $piece;
+			if (array_key_exists($piece, $conf)) {
+				$conf =& $conf[$piece];
+			} else {
+				throw new \Exception(sprintf('no such config item: %s (looking for: %s)',
+					implode('/', $current), $path
+				));
+			}
+		}
+		return $conf;
 	}
 
 	public function runWeb() {
