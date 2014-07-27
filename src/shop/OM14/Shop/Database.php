@@ -10,7 +10,8 @@ class Database {
 
 	public function __construct(Application $app) {
 		$this->app = $app;
-		$app->register(new DoctrineServiceProvider(), array(
+		$silex = $app->getSilexApplication();
+		$silex->register(new DoctrineServiceProvider(), array(
 			'db.options'   => array(
 				'driver'   => 'pdo_mysql',
 				'host'     => $app->getConfig('mysql/host'),

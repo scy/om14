@@ -76,11 +76,6 @@ class Application {
 		return $this;
 	}
 
-	public function register($provider, $values = array()) {
-		$this->app->register($provider, $values);
-		return $this;
-	}
-
 	public function getConfig($path) {
 		$conf = $this->app['conf'];
 		if (!is_array($conf)) {
@@ -106,6 +101,13 @@ class Application {
 	 */
 	public function getDB() {
 		return $this->db;
+	}
+
+	/**
+	 * @return \Silex\Application
+	 */
+	public function getSilexApplication() {
+		return $this->app;
 	}
 
 	public function runWeb() {
