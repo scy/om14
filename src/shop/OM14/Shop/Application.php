@@ -3,6 +3,7 @@
 namespace OM14\Shop;
 
 use Igorw\Silex\ConfigServiceProvider;
+use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 
@@ -27,6 +28,16 @@ class Application {
 			'twig.path' => __DIR__ . '/../../views',
 		));
 		$this->app->register(new SessionServiceProvider());
+		$this->app->register(new DoctrineServiceProvider(), array(
+			'db.options'   => array(
+				'driver'   => 'pdo_mysql',
+				'host'     => $this->getConfig('mysql/host'),
+				'dbname'   => $this->getConfig('mysql/db'),
+				'user'     => $this->getConfig('mysql/user'),
+				'password' => $this->getConfig('mysql/pass'),
+				'charset'  => 'utf8',
+			)
+		));
 		return $this;
 	}
 
@@ -92,6 +103,13 @@ class Application {
 			}
 		}
 		return $conf;
+	}
+
+	/**
+	 * @return \Doctrine\DBAL\Connection The doctrine connection instance.
+	 */
+	public function getDB() {
+		return $this->app['db'];
 	}
 
 	public function runWeb() {
