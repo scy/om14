@@ -1,7 +1,15 @@
 {% extends 'om14-shop.twig' %}
 {% block content %}
-    Home.
-    {% for item in availableItems %}
-        foo: {{ item.title }}
-    {% endfor %}
+    {% if availableItems %}
+        <form method="POST" action="{{ postURL }}">
+            {% for item in availableItems %}
+                <div id="offer-{{ item.type }}" class="item">
+                    {{ item.title }}
+                    <input type="submit" name="add-{{ item.type }}" value="Hinzufügen" />
+                </div>
+            {% endfor %}
+        </form>
+    {% else %}
+        <div class="error">Es gibt momentan nichts zu kaufen!</div>
+    {% endif %}
 {% endblock %}

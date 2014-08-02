@@ -5,6 +5,7 @@ namespace OM14\Shop;
 use Igorw\Silex\ConfigServiceProvider;
 use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\TwigServiceProvider;
+use Silex\Provider\UrlGeneratorServiceProvider;
 
 class Application {
 
@@ -28,6 +29,7 @@ class Application {
 			'twig.path' => __DIR__ . '/../../views',
 		));
 		$this->app->register(new SessionServiceProvider());
+		$this->app->register(new UrlGeneratorServiceProvider());
 		$this->db = new Database($this);
 		return $this;
 	}
@@ -73,8 +75,12 @@ class Application {
 		$app->get('/', function () use ($app, $db) {
 			return $app['twig']->render('home.twig', array(
 				'availableItems' => Item::getAvailableItemProperties($db, true),
+				'postURL' => $app['url_generator']->generate('addItem'),
 			));
-		});
+		})->bind('home');
+		$app->post('/add', function () use ($app, $db) {
+			return $app->redirect($app['url_generator']->generate('home'), 303);
+		})->bind('addItem');
 		return $this;
 	}
 
