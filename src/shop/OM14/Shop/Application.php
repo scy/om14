@@ -18,6 +18,11 @@ class Application {
 	 */
 	protected $session;
 
+	/**
+	 * @var Cart
+	 */
+	protected $cart;
+
 	public function __construct() {
 		$this->app = new \Silex\Application();
 		$this->registerProviders();
@@ -71,6 +76,7 @@ class Application {
 
 	protected function initSession() {
 		$this->session = new Session($this);
+		$this->cart = new Cart($this);
 		return $this;
 	}
 
@@ -117,6 +123,14 @@ class Application {
 		return $this->db;
 	}
 
+	public function getSession() {
+		return $this->session;
+	}
+
+	public function getCart() {
+		return $this->cart;
+	}
+
 	/**
 	 * @return \Silex\Application
 	 */
@@ -124,12 +138,18 @@ class Application {
 		return $this->app;
 	}
 
-	public function runWeb() {
+	public function prepareWeb() {
 		$this->registerErrorHandler(true)
 		     ->enhanceTwig()
 		     ->initSession()
-		     ->defineRoutes()
+		     ->defineRoutes();
+		return $this;
+	}
+
+	public function runWeb() {
+		$this->prepareWeb()
 		     ->app->run();
+		return $this;
 	}
 
 }

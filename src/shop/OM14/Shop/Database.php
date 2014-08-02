@@ -207,6 +207,15 @@ class Database {
 		return $left;
 	}
 
+	public function getCartContents($orderID) {
+		return $this->fetchAll("
+			SELECT   *
+			  FROM   " . self::VIEW_ITEMS . "
+			 WHERE   `order` = :orderID
+			ORDER BY `id` ASC
+		", array('orderID' => $orderID));
+	}
+
 	public function createTables() {
 		$tables = array(
 			self::TABLE_QUEUE => "(

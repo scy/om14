@@ -85,6 +85,20 @@ abstract class Item {
 		return $available;
 	}
 
+	public static final function createFromArray($data) {
+		if (!is_array($data)) {
+			throw new \Exception('data needs to be an array');
+		}
+		self::getClasses();
+		if (!isset(self::$types[$data['type']])) {
+			throw new \Exception('unknown type: ' . $data['type']);
+		}
+		$fqclass = self::fqClass(self::$types[$data['type']]);
+		$item = new $fqclass();
+		$item->fillFromArray($data);
+		return $item;
+	}
+
 	public static final function getAvailableItemProperties(Database $db, $useCache = true) {
 		$available = array();
 		foreach (self::getAvailableItems($db, $useCache) as $class) {
@@ -164,5 +178,7 @@ abstract class Item {
 		// All quotas okay.
 		return static::isEnabled();
 	}
+
+	abstract function fillFromArray($data);
 
 }

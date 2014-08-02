@@ -57,4 +57,8 @@ class Session {
 		return $this;
 	}
 
+	public function getOrderID() {
+		return $this->session->get('order');
+	}
+
 } 
