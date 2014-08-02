@@ -6,11 +6,17 @@ use Igorw\Silex\ConfigServiceProvider;
 use Silex\Provider\SessionServiceProvider;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
+use Symfony\Component\HttpFoundation\Request;
 
 class Application {
 
 	protected $app;
 	protected $db;
+
+	/**
+	 * @var Session
+	 */
+	protected $session;
 
 	public function __construct() {
 		$this->app = new \Silex\Application();
@@ -64,21 +70,21 @@ class Application {
 	}
 
 	protected function initSession() {
-		if ($this->app['session']->get('started') === null) {
-			$this->app['session']->set('started', microtime(true));
-		}
+		$this->session = new Session($this);
 		return $this;
 	}
 
 	protected function defineRoutes() {
-		$app = $this->app; $db = $this->getDB();
-		$app->get('/', function () use ($app, $db) {
+		$app = $this->app; $db = $this->getDB(); $session = $this->session;
+		$app->get('/', function () use ($app, $db, $session) {
 			return $app['twig']->render('home.twig', array(
 				'availableItems' => Item::getAvailableItemProperties($db, true),
 				'postURL' => $app['url_generator']->generate('addItem'),
+				'csrfToken' => $session->getCSRFToken(),
 			));
 		})->bind('home');
-		$app->post('/add', function () use ($app, $db) {
+		$app->post('/add', function (Request $req) use ($app, $db, $session) {
+			$session->checkCSRFToken($req);
 			return $app->redirect($app['url_generator']->generate('home'), 303);
 		})->bind('addItem');
 		return $this;

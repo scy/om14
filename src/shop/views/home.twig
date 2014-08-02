@@ -1,14 +1,16 @@
 {% extends 'om14-shop.twig' %}
 {% block content %}
     {% if availableItems %}
-        <form method="POST" action="{{ postURL }}">
-            {% for item in availableItems %}
+        {% for item in availableItems %}
+            <form method="POST" action="{{ postURL }}">
+                <input type="hidden" name="type" value="{{ item.type }}" />
+                <input type="hidden" name="csrf" value="{{ csrfToken }}" />
                 <div id="offer-{{ item.type }}" class="item">
                     {{ item.title }}
-                    <input type="submit" name="add-{{ item.type }}" value="Hinzufügen" />
+                    <input type="submit" value="Hinzufügen" />
                 </div>
-            {% endfor %}
-        </form>
+            </form>
+        {% endfor %}
     {% else %}
         <div class="error">Es gibt momentan nichts zu kaufen!</div>
     {% endif %}
