@@ -2,12 +2,16 @@
 
 namespace OM14\Shop;
 
-use Doctrine\DBAL\Schema\Schema;
 use Silex\Provider\DoctrineServiceProvider;
 
 class Database {
 
-	const TABLE_QUEUE = 'queue';
+	const TABLE_QUEUE  = 'queue';
+	const TABLE_ORDERS = 'orders';
+	const TABLE_ITEMS  = 'items';
+
+	const VIEW_ITEMS = 'items_v';
+	const VIEW_TAKEN = 'taken_v';
 
 	protected $app;
 
@@ -53,6 +57,12 @@ class Database {
 			throw new \Exception('more than one row returned');
 		}
 		return $row;
+	}
+
+	protected function fetchAll($statement, $params = array()) {
+		$res = $this->db->executeQuery($statement, $params);
+		$res->setFetchMode(\PDO::FETCH_ASSOC);
+		return $res->fetchAll();
 	}
 
 	public function acquireLock($name) {
@@ -145,30 +155,110 @@ class Database {
 		return isset($row['responded']) ? new QueueResponse($this, $id, $row) : false;
 	}
 
-	public function createTables() {
-		$schema = new Schema();
+	public function getTakenTicketCount() {
+		$rows = $this->fetchAll('
+			  SELECT `type`, COUNT(*) count
+			    FROM ' . self::VIEW_TAKEN . '
+			GROUP BY `type`
+		');
+		$ret = array();
+		foreach ($rows as $row) {
+			$ret[$row['type']] = (int)$row['count'];
+		}
+		return $ret;
+	}
 
-		$queue = $schema->createTable(self::TABLE_QUEUE);
-		$queue->addColumn('id', 'integer', array('unsigned' => true, 'autoincrement' => true));
-		$queue->addColumn('requested', 'float', array('notnull' => true));
-		$queue->addColumn('request', 'blob', array('notnull' => true));
-		$queue->addColumn('responded', 'float', array('notnull' => false));
-		$queue->addColumn('response', 'blob', array('notnull' => false));
-		$queue->setPrimaryKey(array('id'));
-		$queue->addIndex(array('requested'), 'requested');
-		$queue->addIndex(array('responded'), 'responded');
-
-		$sqlArray = $schema->toSql($this->db->getDatabasePlatform());
-
-		$this->db->beginTransaction();
-		try {
-			foreach ($sqlArray as $sql) {
-				$this->db->executeQuery($sql);
+	public function getTakenQuota($useCache = true) {
+		static $cache = null;
+		if ($useCache && $cache !== null) {
+			return $cache;
+		}
+		$mapping = Item::getQuotaMapping();
+		$taken = array();
+		foreach ($mapping as $type => $quotas) {
+			foreach ($quotas as $quota) {
+				$taken[$quota] = 0;
 			}
-		} catch (\Exception $e) {
-			var_dump($e);
-			$this->db->rollback();
-			throw $e;
+		}
+		$ticketcounts = $this->getTakenTicketCount();
+		foreach ($ticketcounts as $type => $count) {
+			$quotas = $mapping[$type];
+			foreach ($quotas as $quota) {
+				$taken[$quota] += $count;
+			}
+		}
+		$cache = $taken;
+		return $taken;
+	}
+
+	public function getAvailableQuota($useCache = true) {
+		static $cache = null;
+		if ($useCache && $cache !== null) {
+			return $cache;
+		}
+		$taken = $this->getTakenQuota($useCache);
+		$left = array();
+		foreach (Item::getQuotaLimits() as $quota => $max) {
+			if (array_key_exists($quota, $taken)) {
+				$left[$quota] = $max - $taken[$quota];
+			}
+		}
+		$cache = $left;
+		return $left;
+	}
+
+	public function createTables() {
+		$tables = array(
+			self::TABLE_QUEUE => "(
+				`id`        INT    UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				`requested` DOUBLE UNSIGNED NOT NULL,
+				`request`   BLOB            NOT NULL,
+				`responded` DOUBLE UNSIGNED     NULL,
+				`response`  BLOB                NULL,
+				KEY requested (requested),
+				KEY responded (responded)
+			)",
+			self::TABLE_ORDERS => "(
+				`id`    INT     UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				`state` ENUM
+					('clicking', 'cancelled', 'ordered', 'paid', 'returned')
+				                         NOT NULL DEFAULT 'clicking',
+				`hrid`  CHAR(6)              NULL,
+				`data`  BLOB             NOT NULL,
+				UNIQUE `hrid` (`hrid`)
+			)",
+			self::TABLE_ITEMS => "(
+				`id`     INT          UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				`order`  INT          UNSIGNED NOT NULL,
+				`type`   VARCHAR(10)  NOT NULL,
+				`price`  DECIMAL(5,2) NOT NULL,
+				`hrid`   CHAR(6)          NULL,
+				`secret` CHAR(10)         NULL,
+				`data`   BLOB         NOT NULL,
+				UNIQUE `hrid` (`hrid`),
+				FOREIGN KEY (`order`) REFERENCES `" . self::TABLE_ORDERS . "` (`id`)
+			)",
+		);
+
+		$views = array(
+			self::VIEW_ITEMS => "
+				   SELECT i.*, o.`state`, o.`data` order_data
+				     FROM `" . self::TABLE_ITEMS . "` i
+				LEFT JOIN `" . self::TABLE_ORDERS . "` o
+				       ON o.`id` = i.`order`
+			",
+			self::VIEW_TAKEN => "
+				SELECT *
+				  FROM `" . self::VIEW_ITEMS . "`
+				 WHERE `state` NOT IN ('cancelled', 'returned')
+			"
+		);
+
+		foreach ($tables as $name => $definition) {
+			$this->db->executeQuery("CREATE TABLE $name $definition ENGINE=InnoDB DEFAULT CHARSET=utf8");
+		}
+		foreach ($views as $name => $definition) {
+			$this->db->executeQuery("CREATE VIEW $name AS $definition");
 		}
 	}
 
