@@ -1,4 +1,7 @@
 {% extends 'om14-shop.twig' %}
 {% block content %}
     Home.
+    {% for item in availableItems %}
+        foo: {{ item.title }}
+    {% endfor %}
 {% endblock %}

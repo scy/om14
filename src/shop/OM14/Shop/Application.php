@@ -69,9 +69,11 @@ class Application {
 	}
 
 	protected function defineRoutes() {
-		$app = $this->app;
-		$app->get('/', function () use ($app) {
-			return $app['twig']->render('home.twig');
+		$app = $this->app; $db = $this->getDB();
+		$app->get('/', function () use ($app, $db) {
+			return $app['twig']->render('home.twig', array(
+				'availableItems' => Item::getAvailableItemProperties($db, true),
+			));
 		});
 		return $this;
 	}

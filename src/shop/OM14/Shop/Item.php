@@ -85,9 +85,41 @@ abstract class Item {
 		return $available;
 	}
 
+	public static final function getAvailableItemProperties(Database $db, $useCache = true) {
+		$available = array();
+		foreach (self::getAvailableItems($db, $useCache) as $class) {
+			$fqclass = self::fqClass($class);
+			$available[] = $fqclass::getProperties();
+		}
+		return $available;
+	}
+
+	public static function getType() {
+		static::notOnAbstractClass();
+		return static::$type;
+	}
+
+	public static function getTitle() {
+		static::notOnAbstractClass();
+		return static::$title;
+	}
+
 	public static function getQuotas() {
 		static::notOnAbstractClass();
 		return is_array(static::$quotas) ?: explode('|', static::$quotas);
+	}
+
+	public static function getProperties() {
+		static::notOnAbstractClass();
+		$result = array();
+		foreach (array('Type', 'Title') as $property) {
+			$method = "get$property";
+			$value = static::$method();
+			if ($value !== null) {
+				$result[lcfirst($property)] = $value;
+			}
+		};
+		return $result;
 	}
 
 	/**
