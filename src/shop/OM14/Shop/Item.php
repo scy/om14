@@ -195,6 +195,12 @@ abstract class Item {
 		$this->id = isset($data['id']) ? (int)$data['id'] : null;
 	}
 
-	abstract function getAsArray();
+	public function getAsArray() {
+		return array(
+			'id' => $this->id,
+			'type' => static::getType(),
+			'title' => static::getTitle(),
+		);
+	}
 
 }
