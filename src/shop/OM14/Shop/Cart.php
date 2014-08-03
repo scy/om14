@@ -33,6 +33,12 @@ class Cart {
 		return $items;
 	}
 
+	public function getContentsAsArray() {
+		return array_map(function (Item $item) {
+			return $item->getAsArray();
+		}, $this->getContents());
+	}
+
 	public function getOrderID() {
 		return $this->app->getSession()->getOrderID();
 	}

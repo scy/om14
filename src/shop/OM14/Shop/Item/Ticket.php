@@ -10,4 +10,11 @@ abstract class Ticket extends Item {
 		// TODO
 	}
 
+	public function getAsArray() {
+		return array(
+			'type' => static::getType(),
+			'title' => static::getTitle(),
+		);
+	}
+
 } 

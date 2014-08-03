@@ -190,5 +190,6 @@ abstract class Item {
 	}
 
 	abstract function fillFromArray($data);
+	abstract function getAsArray();
 
 }

@@ -82,10 +82,11 @@ class Application {
 
 	protected function defineRoutes() {
 		$app = $this->app; $db = $this->getDB(); $session = $this->session; $shop = $this;
-		$app->get('/', function () use ($app, $db, $session) {
+		$app->get('/', function () use ($app, $db, $session, $shop) {
 			return $app['twig']->render('home.twig', array(
 				'messages' => $session->getFlashMessages(),
 				'availableItems' => Item::getAvailableItemProperties($db, true),
+				'cart' => $shop->getCart()->getContentsAsArray(),
 				'postURL' => $app['url_generator']->generate('addItem'),
 				'csrfToken' => $session->getCSRFToken(),
 			));

@@ -5,18 +5,27 @@
             <div class="message {{ type }}-message">{% if type == 'error' %}Ein Fehler ist aufgetreten: {% endif %}{{ message }}</div>
         {% endfor %}
     {% endfor %}
-    {% if availableItems %}
-        {% for item in availableItems %}
-            <form method="POST" action="{{ postURL }}">
-                <input type="hidden" name="type" value="{{ item.type }}" />
-                <input type="hidden" name="csrf" value="{{ csrfToken }}" />
-                <div id="offer-{{ item.type }}" class="item">
-                    {{ item.title }}
-                    <input type="submit" value="Hinzufügen" />
-                </div>
-            </form>
+    <div id="offers">
+        {% if availableItems %}
+            {% for item in availableItems %}
+                <form method="POST" action="{{ postURL }}">
+                    <input type="hidden" name="type" value="{{ item.type }}" />
+                    <input type="hidden" name="csrf" value="{{ csrfToken }}" />
+                    <div id="offer-{{ item.type }}" class="item">
+                        {{ item.title }}
+                        <input type="submit" value="Hinzufügen" />
+                    </div>
+                </form>
+            {% endfor %}
+        {% else %}
+            <div class="error">Es gibt momentan nichts zu kaufen!</div>
+        {% endif %}
+    </div>
+    <div id="cart">
+        {% for item in cart %}
+            <div class="item">
+                {{ item.title }}
+            </div>
         {% endfor %}
-    {% else %}
-        <div class="error">Es gibt momentan nichts zu kaufen!</div>
-    {% endif %}
+    </div>
 {% endblock %}
