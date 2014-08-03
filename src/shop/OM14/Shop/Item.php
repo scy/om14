@@ -179,6 +179,16 @@ abstract class Item {
 		return static::isEnabled();
 	}
 
+	public function getPrice() {
+		static::notOnAbstractClass();
+		return 42; // FIXME
+	}
+
+	public function getData() {
+		static::notOnAbstractClass();
+		return array();
+	}
+
 	abstract function fillFromArray($data);
 
 }

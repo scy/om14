@@ -57,8 +57,20 @@ class Session {
 		return $this;
 	}
 
+	public function addFlashMessage($type, $message) {
+		$this->session->getFlashBag()->add($type, $message);
+	}
+
+	public function getFlashMessages() {
+		return $this->session->getFlashBag()->all();
+	}
+
 	public function getOrderID() {
 		return $this->session->get('order');
+	}
+
+	public function setOrderID($orderID) {
+		return $this->session->set('order', $orderID === null ? $orderID : (int)$orderID);
 	}
 
 } 

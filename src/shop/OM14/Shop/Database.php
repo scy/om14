@@ -207,6 +207,19 @@ class Database {
 		return $left;
 	}
 
+	public function createOrder() {
+		return $this->insertAndGetID(self::TABLE_ORDERS, array(
+			'created' => microtime(true),
+			'state' => 'clicking',
+			'data' => json_encode(array(
+				'createdBy' => array(
+					'addr' => @$_SERVER['REMOTE_ADDR'],
+					'agent' => @$_SERVER['HTTP_USER_AGENT'],
+				),
+			)),
+		));
+	}
+
 	public function getCartContents($orderID) {
 		return $this->fetchAll("
 			SELECT   *
@@ -214,6 +227,15 @@ class Database {
 			 WHERE   `order` = :orderID
 			ORDER BY `id` ASC
 		", array('orderID' => $orderID));
+	}
+
+	public function insertItem($orderID, Item $item) {
+		return $this->insertAndGetID(self::TABLE_ITEMS, array(
+			'`order`' => $orderID, // yes I have to quote that myself because Doctrine rules so much
+			'type' => $item->getType(),
+			'price' => $item->getPrice(),
+			'data' => json_encode($item->getData()),
+		));
 	}
 
 	public function createTables() {
@@ -228,12 +250,13 @@ class Database {
 				KEY responded (responded)
 			)",
 			self::TABLE_ORDERS => "(
-				`id`    INT     UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-				`state` ENUM
+				`id`      INT     UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				`created` DOUBLE  UNSIGNED NOT NULL,
+				`state`   ENUM
 					('clicking', 'cancelled', 'ordered', 'paid', 'returned')
-				                         NOT NULL DEFAULT 'clicking',
-				`hrid`  CHAR(6)              NULL,
-				`data`  BLOB             NOT NULL,
+				                           NOT NULL DEFAULT 'clicking',
+				`hrid`    CHAR(6)              NULL,
+				`data`    BLOB             NOT NULL,
 				UNIQUE `hrid` (`hrid`)
 			)",
 			self::TABLE_ITEMS => "(

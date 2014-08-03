@@ -81,16 +81,18 @@ class Application {
 	}
 
 	protected function defineRoutes() {
-		$app = $this->app; $db = $this->getDB(); $session = $this->session;
+		$app = $this->app; $db = $this->getDB(); $session = $this->session; $shop = $this;
 		$app->get('/', function () use ($app, $db, $session) {
 			return $app['twig']->render('home.twig', array(
+				'messages' => $session->getFlashMessages(),
 				'availableItems' => Item::getAvailableItemProperties($db, true),
 				'postURL' => $app['url_generator']->generate('addItem'),
 				'csrfToken' => $session->getCSRFToken(),
 			));
 		})->bind('home');
-		$app->post('/add', function (Request $req) use ($app, $db, $session) {
+		$app->post('/add', function (Request $req) use ($app, $shop, $session) {
 			$session->checkCSRFToken($req);
+			$shop->getCart()->handleAddRequest($req);
 			return $app->redirect($app['url_generator']->generate('home'), 303);
 		})->bind('addItem');
 		return $this;

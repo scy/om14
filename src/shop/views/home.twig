@@ -1,5 +1,10 @@
 {% extends 'om14-shop.twig' %}
 {% block content %}
+    {% for type, flashes in messages %}
+        {% for message in flashes %}
+            <div class="message {{ type }}-message">{% if type == 'error' %}Ein Fehler ist aufgetreten: {% endif %}{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
     {% if availableItems %}
         {% for item in availableItems %}
             <form method="POST" action="{{ postURL }}">
