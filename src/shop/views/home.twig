@@ -8,7 +8,7 @@
     <div id="offers">
         {% if availableItems %}
             {% for item in availableItems %}
-                <form method="POST" action="{{ postURL }}">
+                <form method="POST" action="{{ addURL }}">
                     <input type="hidden" name="type" value="{{ item.type }}" />
                     <input type="hidden" name="csrf" value="{{ csrfToken }}" />
                     <div id="offer-{{ item.type }}" class="item">
@@ -23,9 +23,14 @@
     </div>
     <div id="cart">
         {% for item in cart %}
-            <div class="item">
-                {{ item.title }}
-            </div>
+            <form method="POST" action="{{ removeURL }}">
+                <input type="hidden" name="id" value="{{ item.id }}" />
+                <input type="hidden" name="csrf" value="{{ csrfToken }}" />
+                <div class="item">
+                    {{ item.title }}
+                    <input type="submit" value="Entfernen" />
+                </div>
+            </form>
         {% endfor %}
     </div>
 {% endblock %}

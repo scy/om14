@@ -65,6 +65,10 @@ class Database {
 		return $res->fetchAll();
 	}
 
+	protected function delete($table, $where) {
+		return $this->db->delete($table, $where);
+	}
+
 	public function acquireLock($name) {
 		$res = $this->fetchOne("SELECT GET_LOCK('$name', 0) ok"); // FIXME SQLI
 		if ((int)$res['ok'] !== 1) {
@@ -235,6 +239,13 @@ class Database {
 			'type' => $item->getType(),
 			'price' => $item->getPrice(),
 			'data' => json_encode($item->getData()),
+		));
+	}
+
+	public function removeItem($orderID, $itemID) {
+		return $this->delete(self::TABLE_ITEMS, array(
+			'`order`' => $orderID,
+			'id' => $itemID,
 		));
 	}
 

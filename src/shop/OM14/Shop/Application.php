@@ -87,7 +87,8 @@ class Application {
 				'messages' => $session->getFlashMessages(),
 				'availableItems' => Item::getAvailableItemProperties($db, true),
 				'cart' => $shop->getCart()->getContentsAsArray(),
-				'postURL' => $app['url_generator']->generate('addItem'),
+				'addURL' => $app['url_generator']->generate('addItem'),
+				'removeURL' => $app['url_generator']->generate('removeItem'),
 				'csrfToken' => $session->getCSRFToken(),
 			));
 		})->bind('home');
@@ -96,6 +97,11 @@ class Application {
 			$shop->getCart()->handleAddRequest($req);
 			return $app->redirect($app['url_generator']->generate('home'), 303);
 		})->bind('addItem');
+		$app->post('/remove', function (Request $req) use ($app, $shop, $session) {
+			$session->checkCSRFToken($req);
+			$shop->getCart()->handleRemoveRequest($req);
+			return $app->redirect($app['url_generator']->generate('home'), 303);
+		})->bind('removeItem');
 		return $this;
 	}
 

@@ -87,4 +87,17 @@ class Cart {
 		return $this->getDB()->insertItem($orderID, $item);
 	}
 
-} 
+	public function handleRemoveRequest(Request $req) {
+		$orderID = $this->getOrderID();
+		if ($orderID === null) {
+			return;
+		}
+		$itemID = (int)$req->get('id');
+		$this->removeItem($itemID, $orderID);
+	}
+
+	public function removeItem($itemID, $orderID) {
+		$this->getDB()->removeItem($orderID, $itemID);
+	}
+
+}

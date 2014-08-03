@@ -20,6 +20,8 @@ abstract class Item {
 
 	protected static $typesToQuotas = array();
 
+	protected $id;
+
 	protected static final function fqClass($class) {
 		return __NAMESPACE__ . "\\Item\\$class";
 	}
@@ -189,7 +191,10 @@ abstract class Item {
 		return array();
 	}
 
-	abstract function fillFromArray($data);
+	public function fillFromArray($data) {
+		$this->id = isset($data['id']) ? (int)$data['id'] : null;
+	}
+
 	abstract function getAsArray();
 
 }
