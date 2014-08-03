@@ -1,10 +1,6 @@
 # Tickets
 
-Für die #om14 werdet ihr euch etwa ab Ende Juni anmelden können. Die Ticketpreise stehen noch nicht fest.
-
-Es wird aber wieder einen Early-Bird-Vorverkauf mit vergünstigten Tickets geben.
-
-Folgt uns auf [Twitter][], [Facebook][] oder [Google+][], um benachrichtigt zu werden!
+Der Ticketverkauf ist jetzt online, du findest sie [in unserem Shop](/shop/)!
 
 [Twitter]: https://twitter.com/openmindkonf
 [Facebook]: https://www.facebook.com/openmind.konferenz

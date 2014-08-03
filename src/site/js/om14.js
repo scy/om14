@@ -10,6 +10,36 @@
 jQuery(function ($) {
 	"use strict";
 
+	$('#offers input[type="submit"]').click(function () {
+		var $add = $(this).closest(".item").find(".additionalData");
+		if (!$add.is(":visible")) {
+			$add.slideDown();
+			return false;
+		}
+	});
+
+	$("#offers form").submit(function () {
+		var $form = $(this);
+		var $priceField = $form.find('input[name="price"]:first');
+		if ($priceField.length) {
+			if (1 * $priceField.val().replace(/[^0-9]/g, "") < 1 * $form.find(".price").text().replace(/[^0-9]/g, "")) {
+				$priceField.closest("div").css("background-color", "#ce9a9a");
+				return false;
+			}
+			$priceField.closest("div").css("background-color", "");
+		}
+		var $nameField = $form.find('input[name="name"]:first');
+		if (!$nameField.val().replace(/^\s+|\s+$/g, "").length) {
+			$nameField.closest("div").css("background-color", "#ce9a9a");
+			return false;
+		}
+		$nameField.closest("div").css("background-color", "");
+	})
+});
+
+jQuery(function ($) {
+	"use strict";
+
 	var $header = $("#header");
 
 	var hasCanvas = "no";

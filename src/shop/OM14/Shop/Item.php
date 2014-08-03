@@ -6,25 +6,25 @@ abstract class Item {
 
 	protected static $type;
 	protected static $title;
+	protected static $description;
 	protected static $quotas;
 	protected static $minPrice;
+	protected static $variablePrice;
 	protected static $maxTime;
 	protected static $replaces;
 
 	protected static $types = null;
 
 	protected static $quotaLimits = array(
-		'UBER' => 100, // FIXME non-final
-		'KONF' => 50,  // FIXME non-final
+		'UBER' => 69,
+		'KONF' => 30,
+		'EB'   => 30,
+		'FT'   => 30,
 	);
 
 	protected static $typesToQuotas = array();
 
 	protected $id;
-
-	protected static final function fqClass($class) {
-		return __NAMESPACE__ . "\\Item\\$class";
-	}
 
 	protected static final function notOnAbstractClass() {
 		if (static::$type === null) {
@@ -34,7 +34,11 @@ abstract class Item {
 
 	protected static final function getSubclasses() {
 		// Yes, I could get fancy here, but I don't have the time.
-		return array('UberTicket', 'EarlyUberTicket', 'KonfTicket');
+		return array('UberTicket', 'EarlyUberTicket', 'FirstUberTicket', 'SupportingUberTicket', 'KonfTicket', 'FirstKonfTicket', 'SupportingKonfTicket');
+	}
+
+	public static final function fqClass($class) {
+		return __NAMESPACE__ . "\\Item\\$class";
 	}
 
 	public static final function getClasses() {
@@ -105,7 +109,7 @@ abstract class Item {
 		$available = array();
 		foreach (self::getAvailableItems($db, $useCache) as $class) {
 			$fqclass = self::fqClass($class);
-			$available[] = $fqclass::getProperties();
+			$available[] = $fqclass::getProperties($db);
 		}
 		return $available;
 	}
@@ -120,21 +124,42 @@ abstract class Item {
 		return static::$title;
 	}
 
+	public static function getDescription() {
+		static::notOnAbstractClass();
+		return static::$description;
+	}
+
+	public static function getMinPrice() {
+		static::notOnAbstractClass();
+		return static::$minPrice;
+	}
+
+	public static function getVariablePrice() {
+		static::notOnAbstractClass();
+		return static::$variablePrice;
+	}
+
 	public static function getQuotas() {
 		static::notOnAbstractClass();
 		return is_array(static::$quotas) ?: explode('|', static::$quotas);
 	}
 
-	public static function getProperties() {
+	public static function getProperties(Database $db = null) {
 		static::notOnAbstractClass();
 		$result = array();
-		foreach (array('Type', 'Title') as $property) {
+		foreach (array('Type', 'Title', 'Description', 'MinPrice') as $property) {
 			$method = "get$property";
 			$value = static::$method();
 			if ($value !== null) {
 				$result[lcfirst($property)] = $value;
 			}
 		};
+		if (static::getVariablePrice()) {
+			$result['variablePrice'] = true;
+		}
+		if ($db !== null) {
+			$result['numAvailable'] = static::numAvailable($db);
+		}
 		return $result;
 	}
 
@@ -154,6 +179,27 @@ abstract class Item {
 		return true;
 	}
 
+	public static function numAvailable(Database $db, $useCache = true) {
+		static::notOnAbstractClass();
+		// If this is a replacement type, and the type it's supposed to replace is available, it is not available.
+		if (isset(static::$replaces)) {
+			$replaces = static::fqClass(static::$replaces);
+			if ($replaces::isAvailable($db, $useCache)) {
+				return 0;
+			}
+		}
+		$available = $db->getAvailableQuota($useCache);
+		$minAmount = null;
+		foreach (static::getQuotas() as $quota) {
+			if ($available[$quota] < 1) {
+				return 0;
+			}
+			$minAmount = ($minAmount === null) ? $available[$quota] : min($minAmount, $available[$quota]);
+		}
+		// All quotas okay.
+		return static::isEnabled() ? $minAmount : 0;
+	}
+
 	/**
 	 * Can I currently buy one of these, without breaking quota?
 	 *
@@ -163,22 +209,7 @@ abstract class Item {
 	 * @return bool Whether one of these items could be bought at the moment.
 	 */
 	public static function isAvailable(Database $db, $useCache = true) {
-		static::notOnAbstractClass();
-		// If this is a replacement type, and the type it's supposed to replace is available, it is not available.
-		if (isset(static::$replaces)) {
-			$replaces = static::fqClass(static::$replaces);
-			if ($replaces::isAvailable($db, $useCache)) {
-				return false;
-			}
-		}
-		$available = $db->getAvailableQuota($useCache);
-		foreach (static::getQuotas() as $quota) {
-			if ($available[$quota] < 1) {
-				return false;
-			}
-		}
-		// All quotas okay.
-		return static::isEnabled();
+		return static::numAvailable($db, $useCache) > 0;
 	}
 
 	public function getPrice() {
@@ -200,6 +231,8 @@ abstract class Item {
 			'id' => $this->id,
 			'type' => static::getType(),
 			'title' => static::getTitle(),
+			'price' => $this->getPrice(),
+			'variablePrice' => true,
 		);
 	}
 

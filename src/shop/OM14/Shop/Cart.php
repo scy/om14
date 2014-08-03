@@ -6,14 +6,37 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Cart {
 
+	protected static $limits = array(
+		'Ticket' => 4,
+	);
+
 	protected $app;
 
 	public function __construct(Application $app) {
 		$this->app = $app;
 	}
 
-	protected function checkItemLimits(Item $item, $orderID) {
-		// TODO: Implement.
+	protected function checkItemLimits(Item $newItem, $orderID) {
+		$used = array();
+		$contents = $this->getContents($orderID);
+		foreach ($contents as $cartItem) {
+			foreach (self::$limits as $limitClass => $limit) {
+				if (is_subclass_of($cartItem, Item::fqClass($limitClass))) {
+					if (!isset($used[$limitClass])) {
+						$used[$limitClass] = 0;
+					}
+					$used[$limitClass]++;
+				}
+			}
+		}
+		foreach (self::$limits as $limitClass => $limit) {
+			if (is_subclass_of($newItem, Item::fqClass($limitClass))
+			 && isset($used[$limitClass])
+			 && $used[$limitClass] >= $limit) {
+				return false;
+				// throw new \Exception("you cannot have more than $limit of these items in your cart");
+			}
+		}
 		return true;
 	}
 
@@ -70,10 +93,12 @@ class Cart {
 		$qreq->setData($qreqData);
 		$qres = $qreq->sendAndFetchResponse();
 		$qresData = $qres->getData();
-		if (isset($qresData['success']) && isset($qresData['msg'])) {
+		if (isset($qresData['success']) && $qresData['success']) {
+			$this->app->getSession()->addFlashMessage('ok', 'Zum Warenkorb hinzugefügt!'); // yes, this should rather be somewhere else
+		} elseif (isset($qresData['msg'])) {
 			$this->app->getSession()->addFlashMessage('error', $qresData['msg']);
 		} else {
-			$this->app->getSession()->addFlashMessage('ok', 'Zum Warenkorb hinzugefügt!'); // yes, this should rather be somewhere else
+			$this->app->getSession()->addFlashMessage('error', 'Nicht mehr verfügbar (oder zu viele im Warenkorb)!');
 		}
 	}
 

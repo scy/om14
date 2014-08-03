@@ -58,7 +58,7 @@ class QueueHandler {
 		$cart = new Cart($this->app);
 		$itemID = $cart->addItem($item, $orderID);
 		return array(
-			'success' => true,
+			'success' => (bool)$itemID,
 			'itemID' => $itemID,
 		);
 	}

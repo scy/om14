@@ -1,36 +1,62 @@
 {% extends 'om14-shop.twig' %}
 {% block content %}
+    <h1>{{ h1("Shop") }}</h1>
+    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
     {% for type, flashes in messages %}
         {% for message in flashes %}
             <div class="message {{ type }}-message">{% if type == 'error' %}Ein Fehler ist aufgetreten: {% endif %}{{ message }}</div>
         {% endfor %}
     {% endfor %}
     <div id="offers">
+        <h2>Was darf’s sein?</h2>
         {% if availableItems %}
             {% for item in availableItems %}
                 <form method="POST" action="{{ addURL }}">
                     <input type="hidden" name="type" value="{{ item.type }}" />
                     <input type="hidden" name="csrf" value="{{ csrfToken }}" />
                     <div id="offer-{{ item.type }}" class="item">
-                        {{ item.title }}
-                        <input type="submit" value="Hinzufügen" />
+                        <div class="price">{% if item.variablePrice %}ab {% endif %}{{ item.minPrice }} €</div>
+                        <div class="title">{{ item.title }}</div>
+                        <div class="description">{{ item.description }}</div>
+                        <div class="additionalData">
+                            {% if item.variablePrice %}<div>
+                                Preis: <input type="text" name="price" size="5" maxlength="5" /> €
+                                <div>(was soll dein Ticket kosten?)</div>
+                            </div>{% endif %}
+                            <div>
+                                Name: <input type="text" name="name" size="20" maxlength="50" />
+                                <div>(erscheint so auf deinem Namensschild)</div>
+                            </div>
+                            <div>
+                                Twitter-Account: @<input type="text" name="twitter" size="15" maxlength="15" />
+                                <div>(erscheint auf dem Namensschild und wird <em>veröffentlicht</em> auf der Liste der Teilnehmenden)</div>
+                            </div>
+                        </div>
+                        <div class="submit"><span>{{ item.numAvailable }} verfügbar</span> <input type="submit" value="Hinzufügen" /></div>
                     </div>
                 </form>
             {% endfor %}
         {% else %}
-            <div class="error">Es gibt momentan nichts zu kaufen!</div>
+            <div class="error">Oh! Es gibt momentan nichts zu kaufen!</div>
         {% endif %}
     </div>
     <div id="cart">
-        {% for item in cart %}
-            <form method="POST" action="{{ removeURL }}">
-                <input type="hidden" name="id" value="{{ item.id }}" />
-                <input type="hidden" name="csrf" value="{{ csrfToken }}" />
-                <div class="item">
-                    {{ item.title }}
-                    <input type="submit" value="Entfernen" />
-                </div>
-            </form>
-        {% endfor %}
+        <h2>Dein Warenkorb</h2>
+        {% if cart %}
+            {% for item in cart %}
+                <form method="POST" action="{{ removeURL }}">
+                    <input type="hidden" name="id" value="{{ item.id }}" />
+                    <input type="hidden" name="csrf" value="{{ csrfToken }}" />
+                    <div class="item">
+                        <div class="price">{{ item.price }} €</div>
+                        <div class="title">{{ item.title }}</div>
+                        <div class="submit"><input type="submit" value="Entfernen" /></div>
+                    </div>
+                </form>
+            {% endfor %}
+        {% else %}
+            … ist momentan noch leer.
+        {% endif %}
     </div>
+    <div id="shop-footer"></div>
 {% endblock %}
