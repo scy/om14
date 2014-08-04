@@ -90,6 +90,7 @@ class Application {
 				'cartSum' => $shop->getCart()->getSum(),
 				'addURL' => $app['url_generator']->generate('addItem'),
 				'removeURL' => $app['url_generator']->generate('removeItem'),
+				'orderURL' => $app['url_generator']->generate('order'),
 				'csrfToken' => $session->getCSRFToken(),
 			));
 		})->bind('home');
@@ -103,6 +104,11 @@ class Application {
 			$shop->getCart()->handleRemoveRequest($req);
 			return $app->redirect($app['url_generator']->generate('home'), 303);
 		})->bind('removeItem');
+		$app->post('/order', function (Request $req) use ($app, $shop, $session) {
+			$session->checkCSRFToken($req);
+			$shop->getCart()->handleOrderRequest($req);
+			return $app->redirect($app['url_generator']->generate('home'), 303);
+		})->bind('order');
 		return $this;
 	}
 

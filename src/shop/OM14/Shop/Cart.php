@@ -69,7 +69,17 @@ class Cart {
 	}
 
 	public function getOrderID() {
-		return $this->app->getSession()->getOrderID();
+		$orderID = $this->app->getSession()->getOrderID();
+		if ($orderID === null) {
+			return $orderID;
+		}
+		// confirm with the DB
+		$state = $this->getDB()->getOrderState($orderID);
+		if ($state !== 'clicking') {
+			$this->app->getSession()->setOrderID(null);
+			return null;
+		}
+		return $orderID;
 	}
 
 	public function getDB() {
@@ -133,6 +143,24 @@ class Cart {
 
 	public function removeItem($itemID, $orderID) {
 		$this->getDB()->removeItem($orderID, $itemID);
+	}
+
+	public function handleOrderRequest(Request $req) {
+		$orderID = $this->getOrderID();
+		if ($orderID === null) {
+			return;
+		}
+		$data = array(
+			'ordered' => microtime(true),
+			'name'    => $req->get('name'),
+			'street'  => $req->get('street'),
+			'city'    => $req->get('city'),
+			'mail'    => $req->get('mail'),
+			'comment' => $req->get('comment'),
+		);
+		$this->getDB()->placeOrder($orderID, $data);
+		$this->app->getSession()->setOrderID(null);
+		$this->app->getSession()->addFlashMessage('ok', 'Vielen Dank für deine Bestellung!');
 	}
 
 }

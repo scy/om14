@@ -301,6 +301,22 @@ ul.inline {
 		@include politics;
 		font-size: 120%;
 	}
+
+	form.order {
+		div {
+			font-size: 80%;
+		}
+		table {
+			margin-bottom: 10px;
+		}
+		th {
+			vertical-align: top;
+			text-align: left;
+		}
+		th, td {
+			padding: 2px;
+		}
+	}
 }
 
 #shop-footer {

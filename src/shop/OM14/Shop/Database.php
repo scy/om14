@@ -224,6 +224,43 @@ class Database {
 		));
 	}
 
+	public function getOrder($orderID) {
+		return $this->fetchOne("
+			SELECT *
+			  FROM " . self::TABLE_ORDERS . "
+			 WHERE `id` = :orderID
+		", array('orderID' => $orderID));
+	}
+
+	public function getOrderState($orderID) {
+		return array_reduce($this->fetchOne("
+			SELECT `state`
+			  FROM " . self::TABLE_ORDERS . "
+			 WHERE `id` = :orderID
+		", array('orderID' => $orderID)), function ($carry, $row) {
+			return $row;
+		});
+	}
+
+	public function placeOrder($orderID, $data) {
+		$order = $this->getOrder($orderID);
+		$datafield = json_decode($order['data'], true);
+		$affected = $this->db->update(self::TABLE_ORDERS,
+			array(
+				'state' => 'ordered',
+				'hrid' => null, // FIXME
+				'data' => json_encode(array_merge($datafield, $data)),
+			),
+			array(
+				'id' => $orderID,
+				'state' => 'clicking',
+			)
+		);
+		if ($affected !== 1) {
+			throw new \Exception('could not place order, probably timed out');
+		}
+	}
+
 	public function getCartContents($orderID) {
 		return array_map(function ($item) {
 			$item['data'] = json_decode($item['data'], true);
@@ -231,7 +268,8 @@ class Database {
 		}, $this->fetchAll("
 			SELECT   *
 			  FROM   " . self::VIEW_ITEMS . "
-			 WHERE   `order` = :orderID
+			 WHERE       `order` = :orderID
+			         AND `state` = 'clicking'
 			ORDER BY `id` ASC
 		", array('orderID' => $orderID)));
 	}

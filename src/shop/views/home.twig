@@ -82,6 +82,32 @@
                 </form>
             {% endfor %}
             <div class="sum">Summe: {{ cartSum }} € (inkl. 19 % MwSt)</div>
+            <form method="POST" action="{{ orderURL }}" class="order">
+                <input type="hidden" name="csrf" value="{{ csrfToken }}" />
+                <table>
+                    <tr>
+                        <th>Bürgerlicher Name:</th>
+                        <td><input type="text" name="name" size="20" maxlength="80" /><div>Aus abrechnungsrechtlichen Gründen müssen wir deinen Namen und deine Adresse erfassen.</div></td>
+                    </tr>
+                    <tr>
+                        <th>Straße/Nr.:</th>
+                        <td><input type="text" name="street" size="20" maxlength="80" /></td>
+                    </tr>
+                    <tr>
+                        <th>PLZ/Ort:</th>
+                        <td><input type="text" name="city" size="20" maxlength="80" /><div>Bei Bestellungen aus dem Ausland bitte Landeskennung vor die PLZ setzen.</div></td>
+                    </tr>
+                    <tr>
+                        <th>E-Mail-Adresse:</th>
+                        <td><input type="text" name="mail" size="20" maxlength="80" /><div>Erhält Bestätigungsmails und das Ticket in elektronischer Form.</div></td>
+                    </tr>
+                    <tr>
+                        <th>Kommentar:</th>
+                        <td><input type="text" name="comment" size="20" maxlength="200" /><div>Falls du uns noch einen kurzen Hinweis zukommen lassen möchtest. Lange Hinweise bitte <a href="/kontakt/" target="_blank">per Mail</a>. Bitte gib es hier an, falls du vegetarisches/veganes Essen wünschst oder Lebensmittelunverträglichkeiten hast.</div></td>
+                    </tr>
+                </table>
+                <input type="submit" value="Bestellen!" />
+            </form>
         {% else %}
             … ist momentan noch leer.
         {% endif %}
