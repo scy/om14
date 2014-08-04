@@ -51,7 +51,23 @@ jQuery(function ($) {
 		if (stop) {
 			return false;
 		}
-	})
+	});
+
+	$('form.order').submit(function () {
+		var stop = false;
+		$(this).find('input[type="text"]').not('[name="comment"]').each(function (idx, el) {
+			var $el = $(el), $tr = $el.closest("tr");
+			if (!$el.val().replace(/^\s+|\s+$/g, "").length) {
+				$tr.css("background-color", "#ce9a9a");
+				stop = true;
+			} else {
+				$tr.css("background-color", "");
+			}
+		});
+		if (stop) {
+			return false;
+		}
+	});
 });
 
 jQuery(function ($) {
