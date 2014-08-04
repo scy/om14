@@ -46,15 +46,20 @@ class Application {
 	}
 
 	protected function registerErrorHandler($web) {
-		$app = $this->app;
-		$this->app->error(function (\Exception $e, $code) use ($app, $web) {
+		$app = $this->app; $db = $this->getDB();
+		$this->app->error(function (\Exception $e, $code) use ($app, $db, $web) {
 			$data = array(
-				'code'     => $code,
-				'class'    => get_class($e),
-				'message'  => $e->getMessage(),
-				'location' => $e->getFile() . ':' . $e->getLine(),
-				'trace'    => $e->getTraceAsString(),
+				'code' => $code,
 			);
+			if ($web) {
+				$data = array_merge($data, array(
+					'addr' => $_SERVER['REMOTE_ADDR'],
+					'agent' => $_SERVER['HTTP_USER_AGENT'],
+				));
+			}
+			if ($code != 404) {
+				$data = $db->logError($e, $data);
+			}
 			// TODO: New Relic integration?
 			if ($web) {
 				return $app['twig']->render('error.twig', $data);

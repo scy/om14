@@ -9,6 +9,7 @@ class Database {
 	const TABLE_QUEUE  = 'queue';
 	const TABLE_ORDERS = 'orders';
 	const TABLE_ITEMS  = 'items';
+	const TABLE_ERRORS = 'errors';
 
 	const VIEW_ITEMS = 'items_v';
 	const VIEW_TAKEN = 'taken_v';
@@ -326,6 +327,20 @@ class Database {
 		");
 	}
 
+	public function logError(\Exception $e, $more = array()) {
+		$data = array_merge(array(
+			'class'    => get_class($e),
+			'message'  => $e->getMessage(),
+			'location' => $e->getFile() . ':' . $e->getLine(),
+			'trace'    => $e->getTraceAsString(),
+		), $more);
+		$this->insertAndGetID(self::TABLE_ERRORS, array(
+			'time' => microtime(true),
+			'data' => json_encode($data),
+		));
+		return $data;
+	}
+
 	public function createTables() {
 		$tables = array(
 			self::TABLE_QUEUE => "(
@@ -357,6 +372,11 @@ class Database {
 				`data`   BLOB         NOT NULL,
 				UNIQUE `hrid` (`hrid`),
 				FOREIGN KEY (`order`) REFERENCES `" . self::TABLE_ORDERS . "` (`id`) ON DELETE CASCADE
+			)",
+			self::TABLE_ERRORS => "(
+				`id`   INT    UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				`time` DOUBLE UNSIGNED NOT NULL,
+				`data` BLOB            NOT NULL
 			)",
 		);
 
