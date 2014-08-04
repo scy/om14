@@ -225,12 +225,15 @@ class Database {
 	}
 
 	public function getCartContents($orderID) {
-		return $this->fetchAll("
+		return array_map(function ($item) {
+			$item['data'] = json_decode($item['data'], true);
+			return $item;
+		}, $this->fetchAll("
 			SELECT   *
 			  FROM   " . self::VIEW_ITEMS . "
 			 WHERE   `order` = :orderID
 			ORDER BY `id` ASC
-		", array('orderID' => $orderID));
+		", array('orderID' => $orderID)));
 	}
 
 	public function insertItem($orderID, Item $item) {

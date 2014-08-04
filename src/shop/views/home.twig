@@ -50,6 +50,7 @@
                     <div class="item">
                         <div class="price">{{ item.price }} €</div>
                         <div class="title">{{ item.title }}</div>
+                        <div class="name">für <em>{{ item.name }}</em>{% if item.twitter %} (@{{ item.twitter }}){% endif %}</div>
                         <div class="submit"><input type="submit" value="Entfernen" /></div>
                     </div>
                 </form>

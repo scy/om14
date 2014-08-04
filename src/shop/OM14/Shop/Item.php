@@ -25,6 +25,15 @@ abstract class Item {
 	protected static $typesToQuotas = array();
 
 	protected $id;
+	protected $price;
+	protected $name;
+	protected $twitter;
+
+	public function __construct() {
+		if (!static::$variablePrice) {
+			$this->price = static::$minPrice;
+		}
+	}
 
 	protected static final function notOnAbstractClass() {
 		if (static::$type === null) {
@@ -98,6 +107,9 @@ abstract class Item {
 		self::getClasses();
 		if (!isset(self::$types[$data['type']])) {
 			throw new \Exception('unknown type: ' . $data['type']);
+		}
+		if (isset($data['data']) && is_array($data['data'])) {
+			$data = array_merge($data['data'], $data);
 		}
 		$fqclass = self::fqClass(self::$types[$data['type']]);
 		$item = new $fqclass();
@@ -214,16 +226,64 @@ abstract class Item {
 
 	public function getPrice() {
 		static::notOnAbstractClass();
-		return 42; // FIXME
+		return static::$variablePrice ? $this->price : static::$minPrice;
+	}
+
+	public function setPrice($price) {
+		static::notOnAbstractClass();
+		if (!static::$variablePrice) {
+			throw new \Exception('this item does not support setting the price');
+		}
+		$price = (int)$price;
+		if ($price < static::$minPrice) {
+			throw new \Exception('the minimum price is ' . static::$minPrice);
+		}
+		$this->price = $price;
+	}
+
+	public function getName() {
+		static::notOnAbstractClass();
+		return $this->name;
+	}
+
+	public function setName($name) {
+		static::notOnAbstractClass();
+		$this->name = (string)$name;
+	}
+
+	public function getTwitter() {
+		static::notOnAbstractClass();
+		return $this->twitter;
+	}
+
+	public function setTwitter($twitter) {
+		static::notOnAbstractClass();
+		$this->twitter = ($twitter === null) ? null : (string)$twitter;
 	}
 
 	public function getData() {
 		static::notOnAbstractClass();
-		return array();
+		$ret = array();
+		foreach (array('Name', 'Twitter') as $prop) {
+			$method = "get$prop";
+			if ($this->$method() !== null) {
+				$ret[lcfirst($prop)] = $this->$method();
+			}
+		}
+		return $ret;
 	}
 
 	public function fillFromArray($data) {
 		$this->id = isset($data['id']) ? (int)$data['id'] : null;
+		if (static::$variablePrice && isset($data['price'])) {
+			$this->setPrice($data['price']);
+		}
+		if (isset($data['name'])) {
+			$this->setName($data['name']);
+		}
+		if (isset($data['twitter'])) {
+			$this->setTwitter($data['twitter']);
+		}
 	}
 
 	public function getAsArray() {
@@ -232,6 +292,8 @@ abstract class Item {
 			'type' => static::getType(),
 			'title' => static::getTitle(),
 			'price' => $this->getPrice(),
+			'name' => $this->getName(),
+			'twitter' => $this->getTwitter(),
 			'variablePrice' => true,
 		);
 	}

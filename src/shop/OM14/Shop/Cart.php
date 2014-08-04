@@ -87,6 +87,9 @@ class Cart {
 			'order' => $orderID,
 			'item' => array(
 				'type' => $req->get('type'),
+				'price' => $req->get('price'),
+				'name' => $req->get('name'),
+				'twitter' => $req->get('twitter'),
 			),
 		);
 		$qreq = new QueueRequest($this->getDB());
