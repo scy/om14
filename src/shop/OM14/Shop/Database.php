@@ -260,11 +260,12 @@ class Database {
 		$affected = false; $tries = 0;
 		while ($affected === false && $tries <= self::HRID_TRIES) {
 			$tries++;
+			$hrid = $this->generateHRID(6);
 			try {
 				$affected = $this->db->update(self::TABLE_ORDERS,
 					array(
 						'state' => 'ordered',
-						'hrid' => $this->generateHRID(6),
+						'hrid' => $hrid,
 						'secret' => $this->generateHRID(10),
 						'data' => json_encode(array_merge($datafield, $data)),
 					),
@@ -273,6 +274,9 @@ class Database {
 						'state' => 'clicking',
 					)
 				);
+				if ($affected === 1) {
+					return $hrid;
+				}
 			} catch (\Exception $e) {
 				if ($tries > self::HRID_TRIES) {
 					throw $e;

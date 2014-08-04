@@ -40,6 +40,10 @@ class Cart {
 		return true;
 	}
 
+	/**
+	 * @param int|null $orderID
+	 * @return Item[]
+	 */
 	public function getContents($orderID = null) {
 		if ($orderID === null) {
 			// FIXME: Actually, manually specifying an order ID is for debugging only and should be removed.
@@ -150,6 +154,7 @@ class Cart {
 		if ($orderID === null) {
 			return;
 		}
+		$items = $this->getContents($orderID);
 		$data = array(
 			'ordered' => microtime(true),
 			'name'    => $req->get('name'),
@@ -158,9 +163,51 @@ class Cart {
 			'mail'    => $req->get('mail'),
 			'comment' => $req->get('comment'),
 		);
-		$this->getDB()->placeOrder($orderID, $data);
+		$hrid = $this->getDB()->placeOrder($orderID, $data);
 		$this->app->getSession()->setOrderID(null);
+		$this->sendOrderConfirmationMail($data, $hrid, $items);
 		$this->app->getSession()->addFlashMessage('ok', 'Vielen Dank für deine Bestellung!');
+	}
+
+	public function sendOrderConfirmationMail($data, $hrid, $items) {
+		$sum = 0;
+		$text = "
+		Hallo {$data['name']},
+
+		vielen Dank für deine Anmeldung für die openmind #om14!
+
+		Folgendes hast du bestellt:
+
+		";
+		foreach ($items as $item) {
+			$sum += $item->getPrice();
+			$text .= sprintf("%5d€  %s  (%s)\n", $item->getPrice(), $item->getTitle(),
+				$item::getType() === 'SHIRT' ? $item->getSize() : $item->getName()
+			);
+		}
+		$text .= "
+		Bitte überweise den Gesamtbetrag von {$sum}€ innerhalb einer Woche auf unser Konto:
+
+		    Piratenpartei Deutschland
+		    Konto 7006027903
+		    BLZ 43060967 (GLS-Bank)
+		    Verwendungszweck: om14 {$hrid}
+
+		Falls du diese Mail fälschlicherweise erhalten und gar nichts bestellt hast, musst du dich nicht weiter darum kümmern. Nicht bezahlte Tickets werden nach einer gewissen Zeit wieder storniert.
+
+		Bei Fragen stehen wir dir unter info@openmind-konferenz.de gern zur Verfügung. Bitte gib unbedingt immer deine Bestell-ID an, sie lautet: $hrid
+
+		Wir freuen uns auf deinen Besuch!
+
+		     Dein openmind-Team
+		";
+		$text = trim(str_replace(array("\t", "\n"), array('', "\r\n"), $text)) . "\r\n";
+		foreach (array('info@openmind-konferenz.de', $data['mail']) as $to) {
+			mail($to, "openmind #om14: Deine Anmeldung $hrid", $text, array(
+				'From: openmind #om14 <info@openmind-konferenz.de>',
+				'Content-Type: text/plain; charset=UTF-8',
+			));
+		}
 	}
 
 }
