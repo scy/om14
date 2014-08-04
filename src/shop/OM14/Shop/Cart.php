@@ -202,8 +202,8 @@ class Cart {
 		     Dein openmind-Team
 		";
 		$text = trim(str_replace(array("\t", "\n"), array('', "\r\n"), $text)) . "\r\n";
-		foreach (array('info@openmind-konferenz.de', $data['mail']) as $to) {
-			mail($to, "openmind #om14: Deine Anmeldung $hrid", $text, array(
+		foreach (array('scy-om14-signup#scy.name', $data['mail']) as $to) {
+			mail(str_replace('#', '@', $to), "openmind #om14: Deine Anmeldung $hrid", $text, array(
 				'From: openmind #om14 <info@openmind-konferenz.de>',
 				'Content-Type: text/plain; charset=UTF-8',
 			));
