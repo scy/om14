@@ -13,6 +13,9 @@ class Database {
 	const VIEW_ITEMS = 'items_v';
 	const VIEW_TAKEN = 'taken_v';
 
+	const HRID_CHARS = 'BCDFGHJKLMNPQRSTVWXYZ';
+	const HRID_TRIES = 25;
+
 	protected $app;
 
 	/**
@@ -34,6 +37,15 @@ class Database {
 			)
 		));
 		$this->db = $silex['db'];
+	}
+
+	protected function generateHRID($length = 6) {
+		$hrid = '';
+		$numchars = strlen(self::HRID_CHARS);
+		for ($i = $length; $i--;) {
+			$hrid .= substr(self::HRID_CHARS, mt_rand(0, $numchars), 1);
+		}
+		return $hrid;
 	}
 
 	protected function getQueryBuilder() {
@@ -245,17 +257,28 @@ class Database {
 	public function placeOrder($orderID, $data) {
 		$order = $this->getOrder($orderID);
 		$datafield = json_decode($order['data'], true);
-		$affected = $this->db->update(self::TABLE_ORDERS,
-			array(
-				'state' => 'ordered',
-				'hrid' => null, // FIXME
-				'data' => json_encode(array_merge($datafield, $data)),
-			),
-			array(
-				'id' => $orderID,
-				'state' => 'clicking',
-			)
-		);
+		$affected = false; $tries = 0;
+		while ($affected === false && $tries <= self::HRID_TRIES) {
+			$tries++;
+			try {
+				$affected = $this->db->update(self::TABLE_ORDERS,
+					array(
+						'state' => 'ordered',
+						'hrid' => $this->generateHRID(6),
+						'secret' => $this->generateHRID(10),
+						'data' => json_encode(array_merge($datafield, $data)),
+					),
+					array(
+						'id' => $orderID,
+						'state' => 'clicking',
+					)
+				);
+			} catch (\Exception $e) {
+				if ($tries > self::HRID_TRIES) {
+					throw $e;
+				}
+			}
+		}
 		if ($affected !== 1) {
 			throw new \Exception('could not place order, probably timed out');
 		}
@@ -302,13 +325,14 @@ class Database {
 				KEY responded (responded)
 			)",
 			self::TABLE_ORDERS => "(
-				`id`      INT     UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-				`created` DOUBLE  UNSIGNED NOT NULL,
+				`id`      INT      UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+				`created` DOUBLE   UNSIGNED NOT NULL,
 				`state`   ENUM
 					('clicking', 'cancelled', 'ordered', 'paid', 'returned')
-				                           NOT NULL DEFAULT 'clicking',
-				`hrid`    CHAR(6)              NULL,
-				`data`    BLOB             NOT NULL,
+				                            NOT NULL DEFAULT 'clicking',
+				`hrid`    CHAR(6)               NULL,
+				`secret`  CHAR(10)              NULL,
+				`data`    BLOB              NOT NULL,
 				UNIQUE `hrid` (`hrid`)
 			)",
 			self::TABLE_ITEMS => "(
@@ -317,7 +341,6 @@ class Database {
 				`type`   VARCHAR(10)  NOT NULL,
 				`price`  DECIMAL(5,2) NOT NULL,
 				`hrid`   CHAR(6)          NULL,
-				`secret` CHAR(10)         NULL,
 				`data`   BLOB         NOT NULL,
 				UNIQUE `hrid` (`hrid`),
 				FOREIGN KEY (`order`) REFERENCES `" . self::TABLE_ORDERS . "` (`id`)
