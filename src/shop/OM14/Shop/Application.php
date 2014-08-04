@@ -87,6 +87,7 @@ class Application {
 				'messages' => $session->getFlashMessages(),
 				'availableItems' => Item::getAvailableItemProperties($db, true),
 				'cart' => $shop->getCart()->getContentsAsArray(),
+				'cartSum' => $shop->getCart()->getSum(),
 				'addURL' => $app['url_generator']->generate('addItem'),
 				'removeURL' => $app['url_generator']->generate('removeItem'),
 				'csrfToken' => $session->getCSRFToken(),

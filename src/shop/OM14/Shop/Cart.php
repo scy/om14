@@ -62,6 +62,12 @@ class Cart {
 		}, $this->getContents());
 	}
 
+	public function getSum() {
+		return array_reduce($this->getContents(), function ($carry, Item $item) {
+			return $carry + $item->getPrice();
+		}, 0);
+	}
+
 	public function getOrderID() {
 		return $this->app->getSession()->getOrderID();
 	}
