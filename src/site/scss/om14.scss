@@ -246,6 +246,10 @@ ul.inline {
 #offers, #cart {
 	width: 45%;
 
+	.timeLeft {
+		text-align: center;
+	}
+
 	form {
 		display: block;
 		margin: 10px 0;

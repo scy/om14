@@ -65,6 +65,7 @@
     <div id="cart">
         <h2>Dein Warenkorb</h2>
         {% if cart %}
+            <div class="timeLeft">– noch {{ (timeLeft / 60)|round }} Minuten für dich reserviert –</div>
             {% for item in cart %}
                 <form method="POST" action="{{ removeURL }}">
                     <input type="hidden" name="id" value="{{ item.id }}" />

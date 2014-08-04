@@ -317,6 +317,15 @@ class Database {
 		));
 	}
 
+	public function dropPendingOrders($olderThan) {
+		$olderThan = (int)$olderThan;
+		return $this->db->exec("
+			DELETE FROM " . self::TABLE_ORDERS . "
+			 WHERE     `state` = 'clicking'
+			       AND `created` < NOW() - $olderThan
+		");
+	}
+
 	public function createTables() {
 		$tables = array(
 			self::TABLE_QUEUE => "(
@@ -347,7 +356,7 @@ class Database {
 				`hrid`   CHAR(6)          NULL,
 				`data`   BLOB         NOT NULL,
 				UNIQUE `hrid` (`hrid`),
-				FOREIGN KEY (`order`) REFERENCES `" . self::TABLE_ORDERS . "` (`id`)
+				FOREIGN KEY (`order`) REFERENCES `" . self::TABLE_ORDERS . "` (`id`) ON DELETE CASCADE
 			)",
 		);
 

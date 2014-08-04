@@ -72,6 +72,12 @@ class Cart {
 		}, 0);
 	}
 
+	public function getTimeLeft() {
+		$orderID = $this->getOrderID();
+		$order = $this->getDB()->getOrder($orderID);
+		return max(0, 3600 - (microtime(true) - (float)$order['created']));
+	}
+
 	public function getOrderID() {
 		$orderID = $this->app->getSession()->getOrderID();
 		if ($orderID === null) {

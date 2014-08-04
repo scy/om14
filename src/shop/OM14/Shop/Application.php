@@ -88,6 +88,7 @@ class Application {
 				'availableItems' => Item::getAvailableItemProperties($db, true),
 				'cart' => $shop->getCart()->getContentsAsArray(),
 				'cartSum' => $shop->getCart()->getSum(),
+				'timeLeft' => $shop->getCart()->getTimeLeft(),
 				'addURL' => $app['url_generator']->generate('addItem'),
 				'removeURL' => $app['url_generator']->generate('removeItem'),
 				'orderURL' => $app['url_generator']->generate('order'),
