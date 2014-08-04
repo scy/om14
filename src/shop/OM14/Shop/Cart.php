@@ -90,6 +90,7 @@ class Cart {
 				'price' => $req->get('price'),
 				'name' => $req->get('name'),
 				'twitter' => $req->get('twitter'),
+				'size' => $req->get('size'),
 			),
 		);
 		$qreq = new QueueRequest($this->getDB());

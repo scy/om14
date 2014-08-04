@@ -19,21 +19,38 @@ jQuery(function ($) {
 	});
 
 	$("#offers form").submit(function () {
+		var stop = false;
 		var $form = $(this);
 		var $priceField = $form.find('input[name="price"]:first');
 		if ($priceField.length) {
 			if (1 * $priceField.val().replace(/[^0-9]/g, "") < 1 * $form.find(".price").text().replace(/[^0-9]/g, "")) {
 				$priceField.closest("div").css("background-color", "#ce9a9a");
-				return false;
+				stop = true;
+			} else {
+				$priceField.closest("div").css("background-color", "");
 			}
-			$priceField.closest("div").css("background-color", "");
 		}
 		var $nameField = $form.find('input[name="name"]:first');
-		if (!$nameField.val().replace(/^\s+|\s+$/g, "").length) {
-			$nameField.closest("div").css("background-color", "#ce9a9a");
+		if ($nameField.length) {
+			if (!$nameField.val().replace(/^\s+|\s+$/g, "").length) {
+				$nameField.closest("div").css("background-color", "#ce9a9a");
+				stop = true;
+			} else {
+				$nameField.closest("div").css("background-color", "");
+			}
+		}
+		var $sizeField = $form.find('select[name="size"]:first');
+		if ($sizeField.length) {
+			if (!$sizeField.val().length) {
+				$sizeField.closest("div").css("background-color", "#ce9a9a");
+				stop = true;
+			} else {
+				$sizeField.closest("div").css("background-color", "");
+			}
+		}
+		if (stop) {
 			return false;
 		}
-		$nameField.closest("div").css("background-color", "");
 	})
 });
 

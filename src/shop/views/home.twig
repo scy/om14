@@ -23,16 +23,38 @@
                                 Preis: <input type="text" name="price" size="5" maxlength="5" /> €
                                 <div>(was soll dein Ticket kosten?)</div>
                             </div>{% endif %}
-                            <div>
-                                Name: <input type="text" name="name" size="20" maxlength="50" />
-                                <div>(erscheint so auf deinem Namensschild)</div>
-                            </div>
-                            <div>
-                                Twitter-Account: @<input type="text" name="twitter" size="15" maxlength="15" />
-                                <div>(erscheint auf dem Namensschild und wird <em>veröffentlicht</em> auf der Liste der Teilnehmenden)</div>
-                            </div>
+                            {% if item.type != 'SHIRT' %}
+                                <div>
+                                    Name: <input type="text" name="name" size="20" maxlength="50" />
+                                    <div>(erscheint so auf deinem Namensschild)</div>
+                                </div>
+                                <div>
+                                    Twitter-Account: @<input type="text" name="twitter" size="15" maxlength="15" />
+                                    <div>(erscheint auf dem Namensschild und wird <em>veröffentlicht</em> auf der Liste der Teilnehmenden)</div>
+                                </div>
+                            {% else %}
+                                <div>
+                                    Schnitt und Größe: <select name="size">
+                                        <option value="">bitte wählen</option>
+                                        <option value="Unisex S">Unisex S</option>
+                                        <option value="Unisex M">Unisex M</option>
+                                        <option value="Unisex L">Unisex L</option>
+                                        <option value="Unisex XL">Unisex XL</option>
+                                        <option value="Unisex 2XL">Unisex 2XL</option>
+                                        <option value="Unisex 3XL">Unisex 3XL</option>
+                                        <option value="Unisex 4XL">Unisex 4XL</option>
+                                        <option value="Girlie S">Girlie S</option>
+                                        <option value="Girlie M">Girlie M</option>
+                                        <option value="Girlie L">Girlie L</option>
+                                        <option value="Girlie XL">Girlie XL</option>
+                                        <option value="Girlie 2XL">Girlie 2XL</option>
+                                        <option value="Girlie 3XL">Girlie 3XL</option>
+                                        <option value="Girlie 4XL">Girlie 4XL</option>
+                                    </select>
+                                </div>
+                            {% endif %}
                         </div>
-                        <div class="submit"><span>{{ item.numAvailable }} verfügbar</span> <input type="submit" value="Hinzufügen" /></div>
+                        <div class="submit"><span>{% if item.numAvailable == null %}über 9000{% else %}{{ item.numAvailable }}{% endif %} verfügbar</span> <input type="submit" value="Hinzufügen" /></div>
                     </div>
                 </form>
             {% endfor %}
@@ -50,7 +72,11 @@
                     <div class="item">
                         <div class="price">{{ item.price }} €</div>
                         <div class="title">{{ item.title }}</div>
-                        <div class="name">für <em>{{ item.name }}</em>{% if item.twitter %} (@{{ item.twitter }}){% endif %}</div>
+                        {% if item.type != 'SHIRT' %}
+                            <div class="name">für <em>{{ item.name }}</em>{% if item.twitter %} (@{{ item.twitter }}){% endif %}</div>
+                        {% else %}
+                            <div class="size">{{ item.size }}</div>
+                        {% endif %}
                         <div class="submit"><input type="submit" value="Entfernen" /></div>
                     </div>
                 </form>

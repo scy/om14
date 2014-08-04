@@ -28,6 +28,7 @@ abstract class Item {
 	protected $price;
 	protected $name;
 	protected $twitter;
+	protected $size;
 
 	public function __construct() {
 		if (!static::$variablePrice) {
@@ -43,7 +44,7 @@ abstract class Item {
 
 	protected static final function getSubclasses() {
 		// Yes, I could get fancy here, but I don't have the time.
-		return array('UberTicket', 'EarlyUberTicket', 'FirstUberTicket', 'SupportingUberTicket', 'KonfTicket', 'FirstKonfTicket', 'SupportingKonfTicket');
+		return array('UberTicket', 'EarlyUberTicket', 'FirstUberTicket', 'SupportingUberTicket', 'KonfTicket', 'FirstKonfTicket', 'SupportingKonfTicket', 'Shirt');
 	}
 
 	public static final function fqClass($class) {
@@ -153,7 +154,7 @@ abstract class Item {
 
 	public static function getQuotas() {
 		static::notOnAbstractClass();
-		return is_array(static::$quotas) ?: explode('|', static::$quotas);
+		return isset(static::$quotas) ? (is_array(static::$quotas) ?: explode('|', static::$quotas)) : array();
 	}
 
 	public static function getProperties(Database $db = null) {
@@ -221,7 +222,8 @@ abstract class Item {
 	 * @return bool Whether one of these items could be bought at the moment.
 	 */
 	public static function isAvailable(Database $db, $useCache = true) {
-		return static::numAvailable($db, $useCache) > 0;
+		$num = static::numAvailable($db, $useCache);
+		return $num === null || $num > 0;
 	}
 
 	public function getPrice() {
@@ -261,10 +263,28 @@ abstract class Item {
 		$this->twitter = ($twitter === null) ? null : (string)$twitter;
 	}
 
+	public function getSize() {
+		static::notOnAbstractClass();
+		return $this->size;
+	}
+
+	public function setSize($size) {
+		static::notOnAbstractClass();
+		if ($size === null) {
+			$this->size = null;
+		} else {
+			$size = (string)$size;
+			if (!preg_match('/^(?:Unisex|Girlie) (?:S|M|L|[234]?XL)$/', $size)) {
+				throw new \Exception('invalid size value');
+			}
+			$this->size = $size;
+		}
+	}
+
 	public function getData() {
 		static::notOnAbstractClass();
 		$ret = array();
-		foreach (array('Name', 'Twitter') as $prop) {
+		foreach (array('Name', 'Twitter', 'Size') as $prop) {
 			$method = "get$prop";
 			if ($this->$method() !== null) {
 				$ret[lcfirst($prop)] = $this->$method();
@@ -278,11 +298,11 @@ abstract class Item {
 		if (static::$variablePrice && isset($data['price'])) {
 			$this->setPrice($data['price']);
 		}
-		if (isset($data['name'])) {
-			$this->setName($data['name']);
-		}
-		if (isset($data['twitter'])) {
-			$this->setTwitter($data['twitter']);
+		foreach (array('Name', 'Twitter', 'Size') as $prop) {
+			$method = "set$prop";
+			if (isset($data[lcfirst($prop)])) {
+				$this->$method($data[lcfirst($prop)]);
+			}
 		}
 	}
 
@@ -294,6 +314,7 @@ abstract class Item {
 			'price' => $this->getPrice(),
 			'name' => $this->getName(),
 			'twitter' => $this->getTwitter(),
+			'size' => $this->getSize(),
 			'variablePrice' => true,
 		);
 	}
