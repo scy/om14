@@ -320,10 +320,11 @@ class Database {
 
 	public function dropPendingOrders($olderThan) {
 		$olderThan = (int)$olderThan;
+		$minTime = microtime(true) - $olderThan;
 		return $this->db->exec("
 			DELETE FROM " . self::TABLE_ORDERS . "
 			 WHERE     `state` = 'clicking'
-			       AND `created` < NOW() - $olderThan
+			       AND `created` < $minTime
 		");
 	}
 
