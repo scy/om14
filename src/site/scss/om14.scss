@@ -323,6 +323,13 @@ ul.inline {
 	}
 }
 
+@media (max-width: 720px) {
+	#offers, #cart {
+		float: none;
+		width: 100%;
+	}
+}
+
 #shop-footer {
 	clear: both;
 }
