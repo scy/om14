@@ -10,7 +10,7 @@ Zum fünften Mal treffen sich Visionär\*innen, Philosoph\*innen, Aktivist\*inne
 Widrigkeiten zum Trotz halten wir an der Idee fest, dass eine andere Welt möglich ist.
 
 Die diesjährige openmind-Konferenz findet vom 26. bis 28. September statt.
-Ihr seid herzlich eingeladen, eure Ideen im Call for Participation _bis zum 03. August 2014_ einzureichen!
+Ihr seid herzlich eingeladen, eure Ideen im Call for Participation _bis zum 10. August 2014_ einzureichen!
 Ob zu Wirtschaft, Journalismus, Bildung, Politik, Gesellschaft, Weltraumaufzügen oder anderen Zukunftsthemen, ist egal.
 Die openmind setzt keine Grenzen, sondern will doch anders machen!
 
@@ -30,9 +30,9 @@ Wir helfen dir gern weiter.
 
 ## Zeitplan
 
-* Einreichungsschluss: 03. August 2014, 23:59:59 Kasseler Zeit ;)
-* wir sagen bis zum 10. August Bescheid, ob du dabei bist
-* am 17. August gibt es den Fahrplan (das fertige Programm)
+* Einreichungsschluss: 10. August 2014, 23:59:59 Kasseler Zeit ;)
+* wir sagen bis zum 17. August Bescheid, ob du dabei bist
+* am 24. August gibt es den Fahrplan (das fertige Programm)
 
 ## Was ist die #om14?
 
@@ -76,8 +76,8 @@ Um ein Gefühl für die Themen der openmind zu gewinnen, lohnt sich auch ein Bli
 Du kannst deinen Vorschlag bis 03. August direkt im [Pentabarf][Barf] einreichen, indem du den Anweisungen dort auf der Seite folgst.
 (Weiter unten auf dieser hier gibt es auch noch mal eine Kurzanleitung.)
 Gib bitte mindestens Titel und Kurzbeschreibung deines Vorschlags und eine E-Mail-Adresse an.
-Wir nehmen spätestens am 10. August Kontakt mit dir auf.
-Solltest du Schwierigkeiten mit dem Einreichungs-Tool haben, schick deinen Vorschlag inklusive Titel und Zusammenfassung einfach bis zum 03. August 2014 [per Mail an uns](/kontakt/).
+Wir nehmen spätestens am 17. August Kontakt mit dir auf.
+Solltest du Schwierigkeiten mit dem Einreichungs-Tool haben, schick deinen Vorschlag inklusive Titel und Zusammenfassung einfach bis zum 10. August 2014 [per Mail an uns](/kontakt/).
 
 Gib bitte an, ob du Hilfsmittel (Beamer, Flipchart etc.) benötigst, und häng ggf. einen Entwurf deiner Präsentationsfolien an.
 
