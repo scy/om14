@@ -12,6 +12,7 @@ $bubbleTxtGreen: #75bf90;
 $orange: #f39200;
 $white : #fff;
 $textColor: #3d433f;
+$error: #bf7575;
 
 @font-face {
 	font-family: 'DejaWeb';
@@ -175,6 +176,19 @@ body.not-home {
 	#claim {
 		font-size: 6.25px;
 	}
+}
+
+.message {
+	margin: 20px;
+	padding: 15px;
+}
+
+.error-message {
+	background: $error;
+}
+
+.ok-message {
+	background: $bubbleTxtGreen;
 }
 
 #content {
