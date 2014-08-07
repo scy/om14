@@ -16,8 +16,8 @@ abstract class Item {
 	protected static $types = null;
 
 	protected static $quotaLimits = array(
-		'UBER' => 69,
-		'KONF' => 30,
+		'UBER' => 66,
+		'KONF' => 50,
 		'EB'   => 30,
 		'FT'   => 30,
 	);
