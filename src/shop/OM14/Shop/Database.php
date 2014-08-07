@@ -368,7 +368,7 @@ class Database {
 				`id`     INT          UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 				`order`  INT          UNSIGNED NOT NULL,
 				`type`   VARCHAR(10)  NOT NULL,
-				`price`  DECIMAL(5,2) NOT NULL,
+				`price`  DECIMAL(7,2) NOT NULL,
 				`hrid`   CHAR(6)          NULL,
 				`data`   BLOB         NOT NULL,
 				UNIQUE `hrid` (`hrid`),
