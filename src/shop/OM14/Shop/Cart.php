@@ -195,9 +195,10 @@ class Cart {
 		Bitte überweise den Gesamtbetrag von {$sum}€ innerhalb einer Woche auf unser Konto:
 
 		    Piratenpartei Deutschland
-		    Konto 7006027903
-		    BLZ 43060967 (GLS-Bank)
-		    Verwendungszweck: om14 {$hrid}
+		    IBAN DE52 4306 0967 7006 0279 03
+		    GLS-Bank, BIC GENODEM1GLS
+		    (Konto 7006027903, BLZ 43060967)
+		    Verwendungszweck: openmind om14 {$hrid}
 
 		Falls du diese Mail fälschlicherweise erhalten und gar nichts bestellt hast, musst du dich nicht weiter darum kümmern. Nicht bezahlte Tickets werden nach einer gewissen Zeit wieder storniert.
 
