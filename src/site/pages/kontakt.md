@@ -6,7 +6,7 @@ Außerdem kannst du uns auch gern auf [Twitter][], [Facebook][] oder [Google+][]
 
 # Impressum
 
-Dienstanbieter dieser Seite ist die Piratenpartei Deutschland, vertreten durch den Vorsitzenden Thorsten Wirth.
+Dienstanbieter dieser Seite ist die Piratenpartei Deutschland, vertreten durch den Vorsitzenden Stefan Körner.
 
 ## Reaktionell verantwortlich gemäß § 5 TMG
 
@@ -29,7 +29,7 @@ Dienstanbieter dieser Seite ist die Piratenpartei Deutschland, vertreten durch d
 	Pflugstraße 9a
 	10115 Berlin
 	E-Mail: wgb@piratenpartei.de
-	Geschäftsführung: Veronique Schmitz
+	Geschäftsführung: Stefan Bartels
 	Steuernummer: DE 285069648
 	Finanzamt: Berlin
 
