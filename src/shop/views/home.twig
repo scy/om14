@@ -1,7 +1,21 @@
 {% extends 'om14-shop.twig' %}
 {% block content %}
     <h1>{{ h1("Shop") }}</h1>
-    <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+    <p>Du kannst dich jetzt für die openmind #om14 anmelden!</p>
+    <p><strong>Bitte beachte:</strong>
+        In Tickets <em>mit Übernachtung</em> sind zwei Übernachtungen in der Jugendherberge Kassel inbegriffen.
+        Wenn du dich selbst um eine Übernachtung außerhalb der Jugendherberge kümmerst, wähle ein Ticket <em>ohne Übernachtung</em>.</p>
+    <p>Alle Tickets sind für den gesamten Konferenzzeitraum gültig und beinhalten Verpflegung (Essen, Kaffee, Tee).
+        Wenn du vegane, vegetarische oder glutenfreie Mahlzeiten möchtest, gib uns bitte gesondert Bescheid.</p>
+    <p>Die openmind #om14 startet am Freitag, 26.09. abends (Anreise und Socialising).
+        Vorträge und Barcamp finden von Samstagvormittag bis Sonntagnachmittag statt.</p>
+    <p>Wir haben auch dieses Jahr ein <strong>Early-Bird-Kontingent</strong> für die ersten Bestellungen.
+        Wenn weg, dann weg, also schnell zugreifen!</p>
+    <p>Da die openmind von neuen Impulsen lebt, gibt es auch ein reserviertes Kontingent für Leute, die noch nie dabei waren.
+        Einfach unten ein Ticket mit dem Zusatz <strong>›meine erste openmind‹</strong> auswählen.
+        Kostet das selbe, hat keine versteckten Features.</p>
+    <p>Wir freuen uns über alle, die ein <strong>Support-Ticket</strong> kaufen:
+        Die sind teurer als normale (wie sehr, kannst du selbst festlegen); das dadurch zusätzlich eingenommene Geld verwenden wir für Sozialtickets und unser Referent*innen-Budget.</p>
     {% for type, flashes in messages %}
         {% for message in flashes %}
             <div class="message {{ type }}-message">{% if type == 'error' %}Ein Fehler ist aufgetreten: {% endif %}{{ message }}</div>
