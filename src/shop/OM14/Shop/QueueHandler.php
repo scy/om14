@@ -4,15 +4,13 @@ namespace OM14\Shop;
 
 class QueueHandler {
 
-	const LOCK_NAME = 'OM14_QueueHandler';
-
 	protected $app;
 	protected $db;
 
 	public function __construct(Application $app) {
 		$this->app = $app;
 		$this->db = $app->getDB();
-		$this->db->acquireLock(self::LOCK_NAME);
+		$this->db->acquireLock($app->getConfig('mysql/lock'));
 	}
 
 	public function handleNext() {
