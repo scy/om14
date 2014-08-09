@@ -38,7 +38,7 @@ var files = {
 	fontDest: "/fonts",
 	imgSrc: ">img/**",
 	imgDest: "/img",
-	shopPrvSrc: "src/shop/{{OM14,views}/**,config.yml}",
+	shopPrvSrc: "src/shop/{{OM14,views}/**,config.yml,om14d.php}",
 	shopPubSrc: "src/shop/web/{**,.htaccess}",
 	htaccessSrc: ">.htaccess"
 };
