@@ -14,19 +14,10 @@ Ihr seid herzlich eingeladen, eure Ideen im Call for Participation _bis zum 10.�
 Ob zu Wirtschaft, Journalismus, Bildung, Politik, Gesellschaft, Weltraumaufzügen oder anderen Zukunftsthemen, ist egal.
 Die openmind setzt keine Grenzen, sondern will doch anders machen!
 
-# Schlag was vor!
+# Schlag was vor?
 
-Du möchtest einen Vortrag, Workshop oder gar einen Vorschlag zur Abendunterhaltung einreichen?
-Wir freuen uns darauf!
-
-Damit die Einreichungen strukturiert eingehen, benutzen wir ein [Einreichungssystem][Barf].
-Mach dir dort einen Account und reiche deinen Vorschlag – oder gleich mehrere! – ein.
-Es ist auch okay, wenn du erst mal nur einen Titel und ein paar Stichworte einreichst, mit deinem Account kannst du deine Einreichung jederzeit noch bearbeiten.
-
-Falls du Hilfe beim Einreichen brauchst:
-Wir haben weiter unten eine kurze Anleitung verfasst.
-Und wenn das auch nicht hilft: [schreib uns!](/kontakt/)
-Wir helfen dir gern weiter.
+Die Einreichungsphase ist leider inzwischen vorbei.
+Wir gehen jetzt die Vorschläge durch und setzen uns mit den Vortragenden in Verbindung.
 
 ## Zeitplan
 
@@ -73,13 +64,8 @@ Um ein Gefühl für die Themen der openmind zu gewinnen, lohnt sich auch ein Bli
 
 ## Wie reiche ich meinen Beitrag ein?
 
-Du kannst deinen Vorschlag bis 03. August direkt im [Pentabarf][Barf] einreichen, indem du den Anweisungen dort auf der Seite folgst.
-(Weiter unten auf dieser hier gibt es auch noch mal eine Kurzanleitung.)
-Gib bitte mindestens Titel und Kurzbeschreibung deines Vorschlags und eine E-Mail-Adresse an.
+Du konntest deinen Vorschlag bis 03. August direkt im [Pentabarf][Barf] einreichen.
 Wir nehmen spätestens am 17. August Kontakt mit dir auf.
-Solltest du Schwierigkeiten mit dem Einreichungs-Tool haben, schick deinen Vorschlag inklusive Titel und Zusammenfassung einfach bis zum 10. August 2014 [per Mail an uns](/kontakt/).
-
-Gib bitte an, ob du Hilfsmittel (Beamer, Flipchart etc.) benötigst, und häng ggf. einen Entwurf deiner Präsentationsfolien an.
 
 ## Worum es bei der #om14 nicht geht
 
@@ -91,54 +77,5 @@ Die #om14 dient zum Austausch und zur Bereicherung zwischen verschiedenen politi
 Die #om14 dient nicht der Ausarbeitung von konkreten politischen Vorschlägen.
 Wir wollen (noch) keine gesellschaftlichen Probleme lösen, sondern eine Zukunftsvision formulieren, auf deren Basis Probleme überhaupt erst benannt werden können.
 Ein Vortrag zur Historie und Zukunft der Schaumweinsteuer wäre zwar beispielsweise hoch interessant, aber auf der #om14 fehl am Platze.
-
-# Anleitung zum Ein&shy;reichen
-
-Öffne unser [Einreichungssystem][Barf].
-Es zeigt dir ebenfalls eine kurze Anleitung an.
-Falls dein Englisch nicht so gut ist:
-Keine Sorge, sobald du einen Account hast, kannst du das umstellen.
-Und bis dorthin hilft dir diese Anleitung.
-
-Erster Schritt: klicke auf den Link „Create account“.
-Wünsch dir einen Usernamen („Login name“), gib deine E-Mail-Adresse an und (zweimal) dein gewünschtes Passwort.
-Dann klicke auf „Save“.
-
-Du bekommst eine E-Mail mit einem Bestätigungslink zugeschickt, damit wir sicher sein können, dass die E-Mail-Adresse auch wirklich dir gehört und funktioniert.
-Klick den Link dort an.
-Auf der Seite, die sich öffnet, findest du einen Link „Proceed“, der dich wieder zur Startseite des Systems führt.
-Klicke dort auf „Login“.
-
-Dein Browser fragt dich nach dem Usernamen und deinem Passwort.
-Sobald du die eingegeben hast, kannst du links auf „Person“ klicken und grundlegende Infos über dich eintragen.
-Womöglich möchtest du als erstes oben auf „Account“ klicken und „current language“ auf „de“ für Deutsch stellen.
-Danach einfach gaaanz rechts unten auf „Save“ klicken, und schon spricht das System Deutsch mit dir!
-
-(Ja, danach sind die Links im Menü seltsam, und es ist auch nicht _alles_ übersetzt.
-Tut uns leid.
-Wir haben das System nicht programmiert … :\
-Auch dass es bei „Geschlecht“ nur „male“ und „female“ gibt, finden wir nicht so cool.
-Ist aber kein Pflichtfeld.
-Bitte seht’s uns nach.)
-
-Ein paar der Informationen, die du zu deiner Person einträgst, werden später auch im Fahrplan erscheinen:
-
-* dein öffentlicher Name („public name“)
-* dein hochgeladenes Foto, wenn du „Foto öffentlich“ gewählt hast
-* deine Selbstbeschreibungstexte unter „Beschreibung“
-* die Links
-
-Du kannst dann ein oder mehrere Events einreichen.
-Die „Submission notes“, die auf jedem Reiter eingeblendet sind, gehen nur an uns, du kannst uns dort erklären, wie du dir deinen Beitrag so vorstellst oder uns Anmerkungen zukommen lassen.
-
-Auch hier werden einige Informationen in den Fahrplan übernommen:
-
-* allgemeine Infos wie Titel, Untertitel, Sprache und Typ
-* die Kurzbeschreibung und Inhaltsangabe (keine Sorge, du kannst sie jederzeit noch updaten!)
-* die Links
-* die angehängten Dateien, wenn du das Häkchen bei „öffentlich“ setzt
-
-Das sollte an Infos erst mal reichen.
-Bei Fragen: [schreib uns!](/kontakt/)
 
 [Barf]: https://pentabarf.junge-piraten.de/submission/om14
