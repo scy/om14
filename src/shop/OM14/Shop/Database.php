@@ -245,6 +245,15 @@ class Database {
 		", array('orderID' => $orderID));
 	}
 
+	public function getOrderByHRID($hrid) {
+		return $this->fetchOne("
+			SELECT o.*
+			     , (SELECT SUM(`price`) FROM " . self::TABLE_ITEMS . " i WHERE `i`.`order` = `o`.`id`) price
+			  FROM " . self::TABLE_ORDERS . " o
+			 WHERE `hrid` = :hrid
+		", array('hrid' => $hrid));
+	}
+
 	public function getOrderState($orderID) {
 		return array_reduce($this->fetchOne("
 			SELECT `state`
@@ -253,6 +262,17 @@ class Database {
 		", array('orderID' => $orderID)), function ($carry, $row) {
 			return $row;
 		});
+	}
+
+	public function setOrderState($orderID, $state, $stateBefore = null) {
+		$where = array('id' => $orderID);
+		if (is_string($stateBefore)) {
+			$where['state'] = $stateBefore;
+		}
+		$affected = $this->db->update(self::TABLE_ORDERS, array('state' => $state), $where);
+		if ($affected !== 1) {
+			throw new \Exception("could not update order $orderID");
+		}
 	}
 
 	public function placeOrder($orderID, $data) {
