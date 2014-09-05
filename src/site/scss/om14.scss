@@ -191,6 +191,58 @@ body.not-home {
 	background: $bubbleTxtGreen;
 }
 
+#demwi {
+	display: none;
+}
+
+@media (min-width: 1100px) {
+	html.csstransforms.csstransitions #demwi {
+		display: inline-block;
+		cursor: pointer;
+		position: absolute;
+		right: 0;
+		top: 40px;
+		width: 150px;
+		height: 500px;
+		overflow: hidden;
+		-webkit-transition: width 2s, height 2s;
+		-moz-transition: width 2s, height 2s;
+		transition: width 2s, height 2s;
+		img {
+			-webkit-transform: scale(0.5, 0.5) translate(0, -200px) rotate(-20deg);
+			-moz-transform: scale(0.5, 0.5) translate(0, -200px) rotate(-20deg);
+			transform: scale(0.5, 0.5) translate(0, -200px) rotate(-20deg);
+			-webkit-box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, 0.5);
+			-moz-box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, 0.5);
+			box-shadow: 5px 5px 10px 2px rgba(0, 0, 0, 0.5);
+			-webkit-transition: -webkit-transform 2s, -webkit-box-shadow 2s;
+			-moz-transition: -moz-transform 2s, -moz-box-shadow 2s;
+			transition: transform 2s, box-shadow 2s;
+		}
+		&:hover {
+			width: 550px;
+			height: 750px;
+			-webkit-transform: scale(1, 1);
+			-moz-transform: scale(1, 1);
+			transform: scale(1, 1);
+			-webkit-transition: width 0.5s, height 0.5s;
+			-moz-transition: width 0.5s, height 0.5s;
+			transition: width 0.5s, height 0.5s;
+			img {
+				-webkit-box-shadow: 20px 20px 20px 2px rgba(0, 0, 0, 0.5);
+				-moz-box-shadow: 20px 20px 20px 2px rgba(0, 0, 0, 0.5);
+				box-shadow: 20px 20px 20px 2px rgba(0, 0, 0, 0.5);
+				-webkit-transform: translate(80px, 30px) rotate(5deg);
+				-moz-transform: translate(80px, 30px) rotate(5deg);
+				transform: translate(80px, 30px) rotate(5deg);
+				-webkit-transition: -webkit-transform 0.5s, -webkit-box-shadow 0.5s;
+				-moz-transition: -moz-transform 0.5s, -moz-box-shadow 0.5s;
+				transition: transform 0.5s, box-shadow 0.5s;
+			}
+		}
+	}
+}
+
 #content {
 	@include dejaweb;
 	max-width: 940px;
